@@ -8,7 +8,19 @@ describe('<Logo />', () => {
     expect(
       screen.getByAltText(/picture of winged kuriboh/i).parentElement
     ).toHaveStyle({
-      width: '100px'
+      width: '10rem'
     })
+  })
+  it('should render a smaller logo', () => {
+    render(<Logo size="small" />)
+    expect(
+      screen.getByAltText(/picture of winged kuriboh/i).parentElement
+    ).toHaveStyle({ width: '5rem' })
+  })
+  it('should render a bigger logo', () => {
+    render(<Logo size="big" />)
+    expect(
+      screen.getByAltText(/picture of winged kuriboh/i).parentElement
+    ).toHaveStyle({ width: '20rem' })
   })
 })
