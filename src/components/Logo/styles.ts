@@ -12,6 +12,7 @@ export const Wrapper = styled.div<LogoProps>`
   ${({ size }) => css`
     width: ${options[size!]};
     height: auto;
+    cursor: pointer;
     & img {
       max-width: 100%;
     }

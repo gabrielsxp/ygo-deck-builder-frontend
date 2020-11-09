@@ -58,4 +58,15 @@ describe('<Button />', () => {
       'background-color': '#26253f'
     })
   })
+  it('should render a button with a primary color cover all the width of the screen', () => {
+    renderWithTheme(
+      <Button size="large" fullWidth>
+        Create deck
+      </Button>
+    )
+    expect(screen.getByRole('button')).toHaveStyle({
+      'background-color': '#d5057f',
+      width: '100%'
+    })
+  })
 })

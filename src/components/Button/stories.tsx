@@ -7,7 +7,8 @@ export default {
   argTypes: {
     children: String,
     size: String,
-    color: String
+    color: String,
+    fullWidth: Boolean
   }
 } as Meta
 
@@ -15,5 +16,6 @@ export const Default: Story = (args) => <Button {...args} />
 Default.args = {
   children: 'Create a deck',
   size: 'medium',
-  color: 'primary'
+  color: 'primary',
+  fullWidth: false
 }
