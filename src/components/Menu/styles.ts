@@ -18,7 +18,49 @@ export const Wrapper = styled.div`
 
 export const NavWrapper = styled.div``
 
-export const MenuLink = styled.a``
+export const MenuLink = styled.a`
+  ${media.greaterThan('medium')`
+    ${({ theme }) => css`
+      font-size: ${theme.font.sizes.medium};
+      color: ${theme.colors.white};
+      text-decoration: none;
+      position: relative;
+      &:hover {
+        &:after {
+          animation: hoverAnimation 0.3s ease forwards;
+        }
+      }
+      &:after {
+        content: '';
+        position: absolute;
+        bottom: -0.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 0.3rem;
+        width: 0%;
+        background-color: ${theme.colors.primary};
+        animation: hoverAnimationSqueeze 0.3s ease forwards;
+
+        @keyframes hoverAnimation {
+          from {
+            width: 0%;
+          }
+          to {
+            width: 100%;
+          }
+        }
+        @keyframes hoverAnimationSqueeze {
+          from {
+            width: 100%;
+          }
+          to {
+            width: 0%;
+          }
+        }
+      }
+    `}
+  `}
+`
 
 export const IconWrapper = styled.div`
   width: 2.8rem;
@@ -53,6 +95,13 @@ export const MenuGroup = styled.div`
       padding-left: ${theme.spacings.xxsmall};
     `}
   }
+  ${({ theme }) => css`
+    ${media.greaterThan('medium')`
+      > ${MenuLink} {
+        margin-left: ${theme.spacings.xxsmall};
+      }
+    `}
+  `}
 `
 export const RegistrationBox = styled.div`
   ${({ theme }) => css`
@@ -130,39 +179,6 @@ export const MenuFull = styled.nav<MenuProps>`
       color: ${theme.colors.black};
       text-decoration: none;
       margin-bottom: ${theme.spacings.medium};
-      &:hover {
-        &:after {
-          animation: hoverAnimation 0.3s ease forwards;
-        }
-      }
-      &:after {
-        content: '';
-        position: absolute;
-        bottom: -0.5rem;
-        left: 50%;
-        transform: translateX(-50%);
-        height: 0.3rem;
-        width: 0%;
-        background-color: ${theme.colors.primary};
-        animation: hoverAnimationSqueeze 0.3s ease forwards;
-
-        @keyframes hoverAnimation {
-          from {
-            width: 0%;
-          }
-          to {
-            width: 100%;
-          }
-        }
-        @keyframes hoverAnimationSqueeze {
-          from {
-            width: 100%;
-          }
-          to {
-            width: 0%;
-          }
-        }
-      }
     }
   `}
 `

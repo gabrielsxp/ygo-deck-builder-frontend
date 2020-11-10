@@ -1,9 +1,10 @@
-import { screen, fireEvent } from '@testing-library/react'
+import { screen, fireEvent, cleanup } from '@testing-library/react'
 import { renderWithTheme } from 'utils/helpers'
 
 import Menu from '.'
 
 describe('<Menu />', () => {
+  afterEach(cleanup)
   it('should render the menu', () => {
     renderWithTheme(<Menu />)
 

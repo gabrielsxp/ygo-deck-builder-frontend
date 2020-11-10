@@ -15,11 +15,11 @@ export const Wrapper = styled.h2<HeadingProps>`
   ${({ theme, color }) => css`
     font-family: 'Ubuntu';
     ${color && headingModifier[color!]};
+    font-size: ${theme.font.sizes.xxlarge};
     ${media.greaterThan('medium')`
       font-size: ${
-        parseInt(theme.font.sizes.xxlarge.replace('rem', '')) * 2 + 'rem'
+        parseInt(theme.font.sizes.xxlarge.replace('rem', '')) * 1.2 + 'rem'
       };
     `}
-    font-size: ${theme.font.sizes.xxlarge};
   `}
 `
