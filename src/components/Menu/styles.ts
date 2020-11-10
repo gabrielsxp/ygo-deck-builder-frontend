@@ -1,6 +1,9 @@
 import styled, { css } from 'styled-components'
 import media from 'styled-media-query'
-import { MenuProps } from '.'
+
+type MenuProps = {
+  isOpen: boolean
+}
 
 export const Wrapper = styled.div`
   position: relative;

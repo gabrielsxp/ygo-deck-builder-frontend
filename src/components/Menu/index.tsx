@@ -8,11 +8,11 @@ import { Menu2 as MenuIcon } from '@styled-icons/remix-line/Menu2'
 import { Close as CloseIcon } from '@styled-icons/material/Close'
 
 export type MenuProps = {
-  isOpen: boolean
+  username?: string
 }
 
-const Menu = () => {
-  const [isOpen, setIsOpen] = useState(false)
+const Menu = ({ username }: MenuProps) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   return (
     <S.Wrapper>
       <S.IconWrapper>
@@ -38,16 +38,28 @@ const Menu = () => {
           <S.MenuLink href="#" title="Top Decks">
             Top Decks
           </S.MenuLink>
+          {!!username && (
+            <>
+              <S.MenuLink href="#" title="My Account">
+                My account
+              </S.MenuLink>
+              <S.MenuLink href="#" title="Sign Out">
+                Sign out
+              </S.MenuLink>
+            </>
+          )}
         </S.NavWrapper>
-        <S.RegistrationBox>
-          <Button fullWidth={false} size="large">
-            Login now
-          </Button>
-          <span>or</span>
-          <S.CreateAccount href="#" title="Create an account">
-            Create an account
-          </S.CreateAccount>
-        </S.RegistrationBox>
+        {!username && (
+          <S.RegistrationBox>
+            <Button fullWidth={false} size="large">
+              Login now
+            </Button>
+            <span>or</span>
+            <S.CreateAccount href="#" title="Create an account">
+              Create an account
+            </S.CreateAccount>
+          </S.RegistrationBox>
+        )}
       </S.MenuFull>
     </S.Wrapper>
   )
