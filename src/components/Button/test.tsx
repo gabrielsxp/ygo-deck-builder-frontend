@@ -69,4 +69,15 @@ describe('<Button />', () => {
       width: '100%'
     })
   })
+  it('should render a link with href', () => {
+    renderWithTheme(
+      <Button as="a" href="/link">
+        Click me
+      </Button>
+    )
+    expect(screen.getByRole('link', { name: /click me/i })).toHaveAttribute(
+      'href',
+      '/link'
+    )
+  })
 })
