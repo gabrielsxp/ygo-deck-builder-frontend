@@ -17,5 +17,6 @@ Default.args = {
   children: 'Create a deck',
   size: 'medium',
   color: 'primary',
-  fullWidth: false
+  fullWidth: false,
+  as: 'button'
 }
