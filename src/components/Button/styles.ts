@@ -51,5 +51,6 @@ export const Wrapper = styled.button<WrapperProps>`
     transition: all 0.3s ease-out;
     border: 0.1rem solid transparent;
     font-weight: bold;
+    text-decoration: none;
   `}
 `

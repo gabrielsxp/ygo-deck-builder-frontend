@@ -13,10 +13,19 @@ export default {
 } as Meta
 
 export const Default: Story = (args) => <Button {...args} />
+export const asLink: Story = (args) => <Button {...args} />
 Default.args = {
   children: 'Create a deck',
   size: 'medium',
   color: 'primary',
   fullWidth: false,
   as: 'button'
+}
+asLink.args = {
+  children: 'Create a deck',
+  size: 'medium',
+  color: 'primary',
+  fullWidth: false,
+  as: 'a',
+  href: 'https://google.com'
 }

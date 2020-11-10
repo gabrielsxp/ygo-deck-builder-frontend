@@ -12,4 +12,15 @@ describe('<Heading />', () => {
     renderWithTheme(<Heading color="dark">Latest Decks</Heading>)
     expect(screen.getByRole('heading')).toHaveStyle({ color: '#030517' })
   })
+  it('should render a small heading with primary color', () => {
+    renderWithTheme(
+      <Heading size="small" color="primary">
+        Latest Decks
+      </Heading>
+    )
+    expect(screen.getByRole('heading')).toHaveStyle({
+      'font-size': '1.6rem',
+      color: '#d5057f'
+    })
+  })
 })
