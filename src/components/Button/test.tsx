@@ -33,7 +33,7 @@ describe('<Button />', () => {
     )
     expect(screen.getByRole('button')).toHaveStyle({
       padding: '0.8rem 1.6rem',
-      'background-color': '#26253f'
+      'background-color': '#252f5a'
     })
   })
   it('should render a button with a small size and secondary color', () => {
@@ -44,7 +44,7 @@ describe('<Button />', () => {
     )
     expect(screen.getByRole('button')).toHaveStyle({
       padding: '0.8rem',
-      'background-color': '#26253f'
+      'background-color': '#252f5a'
     })
   })
   it('should render a button with a large size and secondary color', () => {
@@ -55,7 +55,7 @@ describe('<Button />', () => {
     )
     expect(screen.getByRole('button')).toHaveStyle({
       padding: '0.8rem 2.4rem',
-      'background-color': '#26253f'
+      'background-color': '#252f5a'
     })
   })
   it('should render a button with a primary color cover all the width of the screen', () => {
