@@ -34,5 +34,6 @@ describe('<Hero />', () => {
     expect(
       screen.getByRole('link', { name: /create a deck/i })
     ).toBeInTheDocument()
+    expect(screen.getByRole('img')).toBeInTheDocument()
   })
 })
