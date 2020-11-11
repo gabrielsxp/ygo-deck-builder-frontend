@@ -10,3 +10,23 @@ export const decorators = [
     </ThemeProvider>
   )
 ]
+
+export const parameters = {
+  backgrounds: {
+    default: 'light',
+    values: [
+      {
+        name: 'light',
+        value: theme.colors.white
+      },
+      {
+        name: 'medium',
+        value: theme.colors.lighterBg
+      },
+      {
+        name: 'dark',
+        value: theme.colors.mainBg
+      }
+    ]
+  }
+}
