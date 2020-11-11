@@ -14,7 +14,11 @@ export default {
   }
 } as Meta
 
-export const Default: Story<HeroProps> = (args) => <Hero {...args} />
+export const Default: Story<HeroProps> = (args) => (
+  <div style={{ maxWidth: '130rem', margin: '0 auto' }}>
+    <Hero {...args} />
+  </div>
+)
 
 Default.args = {
   img:
