@@ -112,16 +112,16 @@ export default function Index() {
           />
         </Container>
       </S.SectionWrapperAnimated>
-      <S.LighterWrapper>
+      <section style={{ padding: '5rem 0' }}>
         <Container>
           <DeckCarousel
             title="Top Decks"
-            color="medium"
+            color="dark"
             subtitle="Most viewed decks of the last week"
             items={deckList}
           />
         </Container>
-      </S.LighterWrapper>
+      </section>
     </Home>
   )
 }

@@ -5,7 +5,7 @@ import * as HeadingStyles from 'components/Heading/styles'
 export const Wrapper = styled.footer`
   ${({ theme }) => css`
     padding: ${theme.spacings.large} 0;
-    background-color: ${theme.colors.mainBg};
+    background-color: inherit;
   `}
 `
 

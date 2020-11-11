@@ -4,7 +4,7 @@ import { Container } from 'components/Container'
 import Footer from 'components/Footer'
 
 type HomeTemplateProps = {
-  children: React.ReactNodeArray
+  children: React.ReactNodeArray | React.ReactNode
 }
 
 const Home = ({ children }: HomeTemplateProps) => (
@@ -13,9 +13,11 @@ const Home = ({ children }: HomeTemplateProps) => (
       <Menu />
     </Container>
     {children}
-    <Container>
-      <Footer />
-    </Container>
+    <S.LighterWrapperFooter>
+      <Container>
+        <Footer />
+      </Container>
+    </S.LighterWrapperFooter>
   </S.Wrapper>
 )
 

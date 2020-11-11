@@ -1,13 +1,17 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
+import { renderWithTheme } from 'utils/helpers'
 
 import Home from '.'
 
 describe('<Home />', () => {
   it('should render the heading', () => {
-    const { container } = render(<Home />)
+    renderWithTheme(
+      <Home>
+        <h1>Home</h1>
+      </Home>
+    )
 
-    expect(screen.getByRole('heading', { name: /Home/i })).toBeInTheDocument()
-
-    expect(container.firstChild).toMatchSnapshot()
+    expect(screen.getByLabelText(/open menu/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/deck column/i)).toBeInTheDocument()
   })
 })
