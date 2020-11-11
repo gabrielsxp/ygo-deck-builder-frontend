@@ -4,7 +4,8 @@ import * as HeadingStyles from 'components/Heading/styles'
 
 export const Wrapper = styled.footer`
   ${({ theme }) => css`
-    background-color: ${theme.colors.white};
+    padding: ${theme.spacings.large} 0;
+    background-color: ${theme.colors.mainBg};
   `}
 `
 
@@ -32,7 +33,7 @@ export const Column = styled.div`
       display: block;
       margin-bottom: ${theme.spacings.xsmall};
       text-decoration: none;
-      color: ${theme.colors.secondary};
+      color: ${theme.colors.white};
       font-size: ${theme.font.sizes.medium};
       &:hover {
         text-decoration: underline;

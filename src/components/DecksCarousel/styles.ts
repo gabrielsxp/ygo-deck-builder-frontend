@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-export const Wrapper = styled.section``
+export const Wrapper = styled.div``
 
 export const SectionTitles = styled.div`
   ${({ theme }) => css`

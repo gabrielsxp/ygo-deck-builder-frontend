@@ -38,10 +38,10 @@ export const Image = styled.img`
 
   @keyframes upDown {
     from {
-      transform: translateY(3rem);
+      transform: translateY(2rem);
     }
     to {
-      transform: translateY(-3rem);
+      transform: translateY(-2rem);
     }
   }
 `

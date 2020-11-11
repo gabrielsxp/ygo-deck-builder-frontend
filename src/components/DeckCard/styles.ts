@@ -9,7 +9,7 @@ export const Wrapper = styled.a`
   ${({ theme }) => css`
     position: relative;
     background-color: ${theme.colors.white};
-    border: 0.3rem solid ${rgba(theme.colors.primary, 0.6)};
+    border: 0.3rem solid ${rgba(theme.colors.mainBg, 0.2)};
     border-radius: ${theme.border.radius};
     /* overflow: hidden; */
     max-width: 300px;

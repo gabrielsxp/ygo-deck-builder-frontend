@@ -9,7 +9,7 @@ export type DecksCarouselProps = {
   title: string
   subtitle?: string
   items: DeckCardProps[]
-  color?: 'light' | 'dark'
+  color?: 'light' | 'dark' | 'medium'
 }
 
 const settings: SliderSettings = {
