@@ -16,6 +16,10 @@ const headingModifier = {
   `,
   small: () => css`
     font-size: ${({ theme }) => theme.font.sizes.medium};
+  `,
+  large: () => css`
+    font-size: ${({ theme }) =>
+      parseFloat(theme.font.sizes.xxlarge.replace('rem', '')) * 1.5 + 'rem'};
   `
 }
 
