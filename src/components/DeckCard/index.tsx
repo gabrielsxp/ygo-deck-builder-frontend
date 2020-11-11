@@ -77,10 +77,14 @@ const DeckCard = ({
         )}
       </S.NumbersContainer>
       {!!author && (
-        <S.Description>
-          Posted by: <span title="Author name">{author}</span> on{' '}
-          <span title="Publication date">{publishedDate}</span>
-        </S.Description>
+        <>
+          <S.Description style={{ marginTop: '0.8rem' }}>
+            By: <span title="Author name">{author}</span>
+          </S.Description>
+          <S.Description>
+            On: <span title="Publication date">{publishedDate}</span>
+          </S.Description>
+        </>
       )}
     </S.Content>
   </S.Wrapper>

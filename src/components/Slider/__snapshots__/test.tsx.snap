@@ -1,6 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Slider /> should render children as slider item 1`] = `
+.c0 {
+  width: 100%;
+}
+
 .c0 .slick-slider {
   position: relative;
   display: block;
@@ -109,8 +113,147 @@ exports[`<Slider /> should render children as slider item 1`] = `
   display: none;
 }
 
+.c0 .slick-prev,
+.c0 .slick-next {
+  font-size: 0;
+  line-height: 0;
+  position: absolute;
+  top: 50%;
+  display: block;
+  width: 4rem;
+  height: 4rem;
+  padding: 0;
+  -webkit-transform: translate(0,-50%);
+  -ms-transform: translate(0,-50%);
+  -webkit-transform: translate(0,-50%);
+  -ms-transform: translate(0,-50%);
+  transform: translate(0,-50%);
+  cursor: pointer;
+  color: #030517;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.c0 .slick-prev:hover,
+.c0 .slick-prev:focus,
+.c0 .slick-next:hover,
+.c0 .slick-next:focus {
+  color: rgba(3,5,23,0.7);
+  outline: none;
+  background: transparent;
+}
+
+.c0 .slick-prev:hover:before,
+.c0 .slick-prev:focus:before,
+.c0 .slick-next:hover:before,
+.c0 .slick-next:focus:before {
+  opacity: 1;
+}
+
+.c0 .slick-prev.slick-disabled:before,
+.c0 .slick-next.slick-disabled:before {
+  opacity: 0.25;
+}
+
+.c0 .slick-prev:before,
+.c0 .slick-next:before {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.c0 .slick-prev {
+  left: -75px;
+}
+
+.c0 [dir='rtl'] .slick-prev {
+  right: -75px;
+  left: auto;
+}
+
+.c0 .slick-next {
+  right: -75px;
+}
+
+.c0 [dir='rtl'] .slick-next {
+  right: auto;
+  left: -75px;
+}
+
+.c0 .slick-dotted.slick-slider {
+  margin-bottom: 30px;
+}
+
+.c0 .slick-dots {
+  position: absolute;
+  bottom: -40px;
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  text-align: center;
+}
+
+.c0 .slick-dots li {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin: 0 5px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.c0 .slick-dots li button {
+  font-size: 0;
+  line-height: 0;
+  display: block;
+  width: 20px;
+  height: 20px;
+  padding: 5px;
+  cursor: pointer;
+  color: transparent;
+  border: 0;
+  outline: none;
+  background: transparent;
+}
+
+.c0 .slick-dots li button:hover,
+.c0 .slick-dots li button:focus {
+  outline: none;
+}
+
+.c0 .slick-dots li button:hover:before,
+.c0 .slick-dots li button:focus:before {
+  opacity: 1;
+}
+
+.c0 .slick-dots li button:before {
+  font-family: 'slick';
+  font-size: 3rem;
+  line-height: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  content: '•';
+  text-align: center;
+  opacity: 0.25;
+  color: #d5057f;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.c0 .slick-dots li.slick-active button:before {
+  opacity: 1;
+  color: #030517;
+}
+
 <section
   class="c0"
+  color="light"
 >
   <div
     class="slick-slider slick-initialized"

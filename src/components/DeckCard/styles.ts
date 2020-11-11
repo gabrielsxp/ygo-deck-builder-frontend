@@ -12,7 +12,7 @@ export const Wrapper = styled.a`
     border: 0.3rem solid ${rgba(theme.colors.primary, 0.6)};
     border-radius: ${theme.border.radius};
     /* overflow: hidden; */
-    max-width: 340px;
+    max-width: 300px;
     height: 350px;
     display: flex;
     flex-direction: column;
@@ -65,8 +65,10 @@ export const Description = styled.p`
   ${({ theme }) => css`
     font-size: ${theme.font.sizes.small};
     color: ${theme.colors.white};
-    margin: ${theme.spacings.xxsmall} 0;
     word-break: break-all;
+    > span {
+      font-weight: bold;
+    }
   `}
 `
 
@@ -85,10 +87,9 @@ export const NumberSpan = styled.span`
 
 export const IconWrapper = styled.div`
   ${({ theme }) => css`
-    width: 2.4rem;
-    height: 2.4rem;
+    width: 2rem;
+    height: 2rem;
     position: relative;
-    margin-right: ${theme.spacings.xxsmall};
     > svg {
       width: 100%;
       height: 100%;
