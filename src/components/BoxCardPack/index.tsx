@@ -6,6 +6,7 @@ export type BoxCardPackProps = {
   name: string
   image: string
   slug: string
+  cover?: string
 }
 
 const Wrapper = styled.a`
@@ -29,7 +30,7 @@ const Wrapper = styled.a`
 `
 
 const BoxCardPack = ({ name, image, slug }: BoxCardPackProps) => (
-  <Link href={slug} passHref>
+  <Link href={`/box/${slug}`} passHref>
     <Wrapper>
       <S.Image src={image} alt={name} />
       <S.Name>{name}</S.Name>

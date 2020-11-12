@@ -1,4 +1,6 @@
 import styled, { css } from 'styled-components'
+import media from 'styled-media-query'
+import { rgba } from 'polished'
 
 export const LighterWrapper = styled.section`
   ${({ theme }) => css`
@@ -56,5 +58,41 @@ export const SectionWrapperAnimated = styled.section`
         transform: translate(-50%, -20rem);
       }
     }
+  `}
+`
+export const ButtonContainer = styled.div`
+  ${({ theme }) => css`
+    padding: ${theme.spacings.small};
+    background-color: ${rgba(theme.colors.lighterBg, 0.8)};
+    border-radius: ${theme.border.radius};
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    & > div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-direction: row;
+    }
+
+    & > p {
+      font-size: ${theme.font.sizes.medium};
+      font-weight: bold;
+      color: ${theme.colors.white};
+      margin-bottom: ${theme.spacings.small};
+    }
+    & > span {
+      font-size: ${theme.font.sizes.xsmall};
+      font-weight: bold;
+      color: ${theme.colors.white};
+      margin-bottom: ${theme.spacings.small};
+    }
+    & div > button:first-child {
+      margin-right: ${theme.spacings.small};
+    }
+    ${media.greaterThan('medium')`
+      flex-direction: column;
+    `}
   `}
 `

@@ -15,7 +15,7 @@ export type BoxCardPackCarouselProps = {
 const settings: SliderSettings = {
   arrows: true,
   dots: true,
-  slidesToShow: 5.4,
+  slidesToShow: 4.4,
   slidesToScroll: 1,
   lazyLoad: 'ondemand',
   nextArrow: <NavigateNextIcon aria-label="next packs" />,
@@ -32,7 +32,7 @@ const settings: SliderSettings = {
     {
       breakpoint: 1024,
       settings: {
-        arrows: true,
+        arrows: false,
         slidesToShow: 3.4,
         slidesToScroll: 1
       }
@@ -41,7 +41,7 @@ const settings: SliderSettings = {
       breakpoint: 570,
       settings: {
         arrows: false,
-        slidesToShow: 2.4,
+        slidesToShow: 1.5,
         slidesToScroll: 1
       }
     },
@@ -49,7 +49,7 @@ const settings: SliderSettings = {
       breakpoint: 320,
       settings: {
         arrows: false,
-        slidesToShow: 1.4,
+        slidesToShow: 1.2,
         slidesToScroll: 1
       }
     }

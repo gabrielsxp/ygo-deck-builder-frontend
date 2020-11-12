@@ -33,7 +33,7 @@ describe('<DecksCarousel />', () => {
         name: /All Special Packs released/i
       })
     ).toHaveStyle({ color: '#FAFAFA' })
-    expect(screen.getAllByRole('link')).toHaveLength(6)
+    expect(screen.getAllByRole('link')).toHaveLength(5)
     expect(screen.getByLabelText(/Carousel Container/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/next packs/i)).toHaveStyle({
       color: '#d5057f'
