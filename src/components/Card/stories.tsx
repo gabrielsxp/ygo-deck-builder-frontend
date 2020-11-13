@@ -162,21 +162,55 @@ export const FullBlurN: Story<CardProps> = (args) => (
     </div>
   </Container>
 )
+export const DropAnimationRight: Story<CardProps> = (args) => (
+  <Container>
+    <div
+      style={{
+        width: '100%',
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
+      <Card {...args} />
+    </div>
+  </Container>
+)
+export const DropAnimationLeft: Story<CardProps> = (args) => (
+  <Container>
+    <div
+      style={{
+        width: '100%',
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
+      <Card {...args} />
+    </div>
+  </Container>
+)
 
 Monster.args = {
-  ...data
+  ...data,
+  rarity: 'UR'
 }
 
 Trap.args = {
-  ...trap
+  ...trap,
+  rarity: 'UR'
 }
 
 Spell.args = {
-  ...spell
+  ...spell,
+  rarity: 'SR'
 }
 
 FullUR.args = {
   ...data,
+  rarity: 'UR',
   size: 'full',
   playAnimation: true
 }
@@ -229,4 +263,20 @@ FullBlurN.args = {
   rarity: 'N',
   playAnimation: false,
   playBlurAnimation: true
+}
+DropAnimationRight.args = {
+  ...data,
+  size: 'full',
+  rarity: 'N',
+  playAnimation: false,
+  playBlurAnimation: false,
+  dropAnimationRight: true
+}
+DropAnimationLeft.args = {
+  ...data,
+  size: 'full',
+  rarity: 'N',
+  playAnimation: false,
+  playBlurAnimation: false,
+  dropAnimationLeft: true
 }

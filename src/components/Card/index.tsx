@@ -20,6 +20,8 @@ export type CardProps = {
   size?: 'normal' | 'full'
   playAnimation?: boolean
   playBlurAnimation?: boolean
+  dropAnimationLeft?: boolean
+  dropAnimationRight?: boolean
 }
 
 const Card = ({
@@ -39,9 +41,14 @@ const Card = ({
   boxAmount,
   release,
   playAnimation = false,
-  playBlurAnimation = false
+  playBlurAnimation = false,
+  dropAnimationLeft = false,
+  dropAnimationRight = false
 }: CardProps) => (
   <S.Wrapper
+    className={
+      dropAnimationLeft ? 'drop-left' : dropAnimationRight ? 'drop-right' : ''
+    }
     playAnimation={playAnimation}
     playBlurAnimation={playBlurAnimation}
     rarity={rarity}

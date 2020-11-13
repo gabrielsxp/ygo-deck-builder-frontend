@@ -96,6 +96,14 @@ const cardModifiers = {
   ) => css`
     max-width: 30rem;
     height: min(80vh, 40rem);
+    &.drop-left {
+      transform-origin: right bottom;
+      animation: dropAnimationLeft 0.5s linear forwards;
+    }
+    &.drop-right {
+      transform-origin: left bottom;
+      animation: dropAnimationRight 0.5s linear forwards;
+    }
     &:after {
       content: '';
       width: 130%;
@@ -147,31 +155,31 @@ const cardModifiers = {
       > span:nth-of-type(1) {
         ${playAnimation &&
         css`
-          animation: cardFrameAnimation 1s infinite linear;
+          animation: cardFrameAnimation 1.5s infinite linear;
         `}
       }
       > span:nth-of-type(2) {
         ${playAnimation &&
         css`
-          animation: cardFrameAnimation 1s 0.25s infinite linear;
+          animation: cardFrameAnimation 1.5s 0.25s infinite linear;
         `}
       }
       > span:nth-of-type(3) {
         ${playAnimation &&
         css`
-          animation: cardFrameAnimation 1s 0.5s infinite linear;
+          animation: cardFrameAnimation 1.5s 0.5s infinite linear;
         `}
       }
       > span:nth-of-type(4) {
         ${playAnimation &&
         css`
-          animation: cardFrameAnimation 1s 0.75s infinite linear;
+          animation: cardFrameAnimation 1.5s 0.75s infinite linear;
         `}
       }
       > span:nth-of-type(5) {
         ${playAnimation &&
         css`
-          animation: cardFrameAnimation 1s 1s infinite linear;
+          animation: cardFrameAnimation 1.5s 1s infinite linear;
         `}
       }
       @keyframes cardFrameAnimation {
@@ -188,6 +196,28 @@ const cardModifiers = {
         }
         to {
           transfrom: translate(-50%, -50%) scale(2);
+        }
+      }
+      @keyframes dropAnimationLeft {
+        0% {
+          transform: translate(0, 0) rotate(-10deg);
+        }
+        50% {
+          transform: translate(-20rem, 20rem) rotate(-30deg);
+        }
+        100% {
+          transform: translate(-50rem, 50rem) rotate(-60deg);
+        }
+      }
+      @keyframes dropAnimationRight {
+        0% {
+          transform: translate(0, 0) rotate(10deg);
+        }
+        50% {
+          transform: translate(20rem, 20rem) rotate(30deg);
+        }
+        100% {
+          transform: translate(50rem, 50rem) rotate(60deg);
         }
       }
     }
