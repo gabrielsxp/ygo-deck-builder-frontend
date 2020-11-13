@@ -2,10 +2,10 @@ import styled, { css } from 'styled-components'
 import { rgba } from 'polished'
 import { OverlayProps } from '.'
 
-type OverlayPartialProps = Pick<OverlayProps, 'display'>
+type OverlayPartialProps = Pick<OverlayProps, 'show'>
 
 export const Wrapper = styled.div<OverlayPartialProps>`
-  ${({ theme, display }) => css`
+  ${({ theme, show }) => css`
     background-color: ${rgba(theme.colors.black, 0.5)};
     position: fixed;
     width: 100vw;
@@ -14,7 +14,7 @@ export const Wrapper = styled.div<OverlayPartialProps>`
     display: flex;
     justify-content: center;
     align-items: center;
-    ${display
+    ${show
       ? () => css`
           display: block;
         `

@@ -2,11 +2,11 @@ import * as S from './styles'
 
 export type OverlayProps = {
   children: React.ReactNode
-  display?: boolean
+  show?: boolean
 }
 
-const Overlay = ({ children, display = false }: OverlayProps) => (
-  <S.Wrapper display={display}>{children}</S.Wrapper>
+const Overlay = ({ children, show = false }: OverlayProps) => (
+  <S.Wrapper show={show}>{children}</S.Wrapper>
 )
 
 export default Overlay
