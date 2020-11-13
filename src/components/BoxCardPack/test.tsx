@@ -10,7 +10,7 @@ describe('<BoxCardPack />', () => {
 
     expect(screen.getByRole('link')).toHaveAttribute(
       'href',
-      '/the-ultimate-rising-box'
+      '/box/the-ultimate-rising-box'
     )
 
     expect(screen.getByAltText(/The Ultimate Rising Box/i)).toBeInTheDocument()
