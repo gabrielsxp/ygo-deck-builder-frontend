@@ -3,9 +3,80 @@ import media from 'styled-media-query'
 import { CardProps } from '.'
 import { rgba } from 'polished'
 
+const rarityModifier = {
+  UR: () => css`
+    border-image: linear-gradient(
+      to bottom right,
+      #b827fc 0%,
+      #2c90fc 25%,
+      #b8fd33 50%,
+      #fec837 75%,
+      #fd1892 100%
+    );
+  `,
+  SR: () => css`
+    border-image: linear-gradient(
+      to bottom right,
+      #f7e500 0%,
+      #ffbb00 50%,
+      #fdeb00 100%
+    );
+  `,
+  R: () => css`
+    border-image: linear-gradient(
+      to bottom right,
+      #2a44e9 0%,
+      #338cfa 50%,
+      #2e77f2 100%
+    );
+  `,
+  N: () => css`
+    border-image: none;
+  `
+}
+
+const rarityModifierBlur = {
+  UR: () => css`
+    border-radius: 50%;
+    background-image: linear-gradient(
+      to bottom right,
+      #b827fc 0%,
+      #2c90fc 25%,
+      #b8fd33 50%,
+      #fec837 75%,
+      #fd1892 100%
+    );
+  `,
+  SR: () => css`
+    border-radius: 50%;
+    background-image: linear-gradient(
+      to bottom right,
+      #f7e500 0%,
+      #ffbb00 50%,
+      #fdeb00 100%
+    );
+  `,
+  R: () => css`
+    border-radius: 50%;
+    background-image: linear-gradient(
+      to bottom right,
+      #2a44e9 0%,
+      #338cfa 50%,
+      #2e77f2 100%
+    );
+  `,
+  N: () => css`
+    background: transparent;
+    border-image: none;
+  `
+}
+
 const cardModifiers = {
   normal: () => css`
     height: 18rem;
+    &:hover > div {
+      display: block;
+    }
 
     ${media.between('medium', 'large')`
       height: 15rem;
@@ -18,22 +89,125 @@ const cardModifiers = {
       height: 10rem;
     }
   `,
-  full: () => css`
-    max-width: 50rem;
-    height: 60rem;
+  full: (
+    rarity: keyof typeof rarityModifier,
+    playAnimation: boolean,
+    playBlurAnimation: boolean
+  ) => css`
+    max-width: 30rem;
+    height: min(80vh, 40rem);
+    &:after {
+      content: '';
+      width: 130%;
+      height: 110%;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      filter: blur(3rem);
+      ${playBlurAnimation && rarityModifierBlur[rarity!]};
+      ${({ theme }) => css`
+        z-index: ${theme.layers.backgroundOverlay1};
+      `}
+      animation: blurAnimation 2s infinite ease-in-out alternate;
+    }
+    & > span {
+      top: -2rem;
+      & > img {
+        width: 8rem;
+      }
+    }
+    ${media.lessThan('medium')`
+      & > span {
+        top: -1.5rem;
+        & > img {
+          width: 6rem;
+        }
+      }
+    `}
+    > #card-animation-back {
+      > span {
+        ${({ theme }) => css`
+          width: calc(100% + 50rem);
+          height: calc(100% + 50rem);
+          position: absolute;
+          top: -25rem;
+          left: -25rem;
+          z-index: ${theme.layers.backgroundOverlay1};
+          border: 5px solid transparent;
+          ${rarity && rarityModifier[rarity!]};
+          border-image-slice: 1;
+          ${playBlurAnimation &&
+          css`
+            border: none;
+          `}
+        `}
+      }
+      > span:nth-of-type(1) {
+        ${playAnimation &&
+        css`
+          animation: cardFrameAnimation 1s infinite linear;
+        `}
+      }
+      > span:nth-of-type(2) {
+        ${playAnimation &&
+        css`
+          animation: cardFrameAnimation 1s 0.25s infinite linear;
+        `}
+      }
+      > span:nth-of-type(3) {
+        ${playAnimation &&
+        css`
+          animation: cardFrameAnimation 1s 0.5s infinite linear;
+        `}
+      }
+      > span:nth-of-type(4) {
+        ${playAnimation &&
+        css`
+          animation: cardFrameAnimation 1s 0.75s infinite linear;
+        `}
+      }
+      > span:nth-of-type(5) {
+        ${playAnimation &&
+        css`
+          animation: cardFrameAnimation 1s 1s infinite linear;
+        `}
+      }
+      @keyframes cardFrameAnimation {
+        from {
+          transform: scale(0);
+        }
+        to {
+          transfrom: scale(4);
+        }
+      }
+      @keyframes blurAnimation {
+        from {
+          transform: translate(-50%, -50%) scale(1.2);
+        }
+        to {
+          transfrom: translate(-50%, -50%) scale(2);
+        }
+      }
+    }
   `
 }
 
 export const Wrapper = styled.div`
-  ${({ size }: { theme: DefaultTheme } & Pick<CardProps, 'size'>) => css`
+  ${({
+    size,
+    rarity = 'N',
+    playAnimation,
+    playBlurAnimation
+  }: { theme: DefaultTheme } & Pick<
+    CardProps,
+    'size' | 'playAnimation' | 'playBlurAnimation'
+  > & { rarity: keyof typeof rarityModifier }) => css`
     position: relative;
     width: 100%;
-    margin-top: 0rem;
-    ${size && cardModifiers[size!]};
-
-    &:hover > div {
-      display: block;
-    }
+    ${size &&
+    cardModifiers[size!](rarity!, playAnimation!, playBlurAnimation!)};
   `}
 `
 

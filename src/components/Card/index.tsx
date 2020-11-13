@@ -4,7 +4,7 @@ import Heading from 'components/Heading'
 export type CardProps = {
   name: string
   displayRarity?: boolean
-  rarity: string | 'N' | 'R' | 'SR' | 'UR'
+  rarity: 'N' | 'R' | 'SR' | 'UR'
   how?: string[]
   release: string
   duelLinksRarity: string | 'N' | 'R' | 'SR' | 'UR'
@@ -18,6 +18,8 @@ export type CardProps = {
   archetype?: string | null
   boxAmount: number
   size?: 'normal' | 'full'
+  playAnimation?: boolean
+  playBlurAnimation?: boolean
 }
 
 const Card = ({
@@ -35,9 +37,24 @@ const Card = ({
   atk,
   def,
   boxAmount,
-  release
+  release,
+  playAnimation = false,
+  playBlurAnimation = false
 }: CardProps) => (
-  <S.Wrapper size={size} data-testid="card-wrapper">
+  <S.Wrapper
+    playAnimation={playAnimation}
+    playBlurAnimation={playBlurAnimation}
+    rarity={rarity}
+    size={size}
+    data-testid="card-wrapper"
+  >
+    <div id="card-animation-back">
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+    </div>
     {displayRarity && (
       <S.RarityBadge>
         <img alt={rarity} src={`/img/${rarity}.png`}></img>
