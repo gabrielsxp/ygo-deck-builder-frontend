@@ -101,13 +101,13 @@ const Card = ({
         {desc}
       </S.Label>
       <S.StatusContainer>
-        {atk && (
+        {!!atk && (
           <S.Label aria-hidden="true">
             <S.LabelDescription>ATK: </S.LabelDescription>
             {atk}
           </S.Label>
         )}
-        {def && (
+        {!!def && (
           <S.Label aria-hidden="true">
             <S.LabelDescription>DEF: </S.LabelDescription>
             {def}

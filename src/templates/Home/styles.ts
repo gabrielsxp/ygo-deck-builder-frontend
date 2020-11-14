@@ -17,7 +17,7 @@ export const SectionTitles = styled.div`
     flex-direction: column;
     width: 100%;
     align-items: center;
-    margin-bottom: ${theme.spacings.small};
+    margin-bottom: ${theme.spacings.xsmall};
     padding: ${theme.spacings.xlarge} 0;
     > h2 {
       margin-bottom: ${theme.spacings.xxsmall};

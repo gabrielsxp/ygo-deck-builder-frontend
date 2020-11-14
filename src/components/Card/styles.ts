@@ -299,7 +299,7 @@ export const CardInfoContainer = styled.div`
     width: 28rem;
     z-index: ${theme.layers.overlay};
     padding: ${theme.spacings.xxsmall};
-    background-color: ${rgba(theme.colors.lighterBg, 0.2)};
+    background-color: ${theme.colors.lighterBg};
     border-radius: ${theme.border.radius};
     border: 0.1rem solid ${rgba(theme.colors.primary, 0.4)};
     display: none;

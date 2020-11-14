@@ -5,7 +5,8 @@ export const Wrapper = styled.div`
   position: relative;
   display: grid;
   ${({ theme }) => css`
-    grid-gap: ${theme.spacings.xxsmall};
+    grid-column-gap: ${theme.spacings.xxsmall};
+    grid-row-gap: ${theme.spacings.medium};
     padding: ${theme.spacings.medium} 0;
   `}
   grid-template-columns: repeat(10, 1fr);

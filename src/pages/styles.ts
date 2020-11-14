@@ -96,3 +96,27 @@ export const ButtonContainer = styled.div`
     `}
   `}
 `
+export const Label = styled.p`
+  ${({ theme }) => css`
+    font-size: ${theme.font.sizes.xsmall};
+    color: ${theme.colors.white};
+    margin: ${theme.spacings.xxsmall} 0;
+  `}
+`
+
+export const LabelDescription = styled.span`
+  ${({ theme }) => css`
+    font-size: inherit;
+    color: ${theme.colors.primary};
+    font-weight: bold;
+  `}
+`
+export const BoxInfosContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  > p {
+    margin-right: 1.2rem;
+  }
+`

@@ -9,7 +9,7 @@ describe('<CardGrid />', () => {
     renderWithTheme(
       <CardGrid>
         {Array.from(new Array(40)).map((_, index) => (
-          <Card {...data} key={index} />
+          <Card {...data} rarity="UR" key={index} />
         ))}
       </CardGrid>
     )
