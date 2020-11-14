@@ -80,11 +80,13 @@ function Boxes({
     <Home>
       {currentPacks && currentPacks.length > 0 && (
         <Overlay show={displayOverlay}>
-          <CardGrid>
-            {currentPacks[0].map((card, index) => {
-              return <Card key={index} {...card} />
-            })}
-          </CardGrid>
+          <Container>
+            <CardGrid>
+              {currentPacks[0].map((card, index) => {
+                return <Card key={index} {...card} />
+              })}
+            </CardGrid>
+          </Container>
         </Overlay>
       )}
       <Header name={box.name} image={box.cover ?? '/img/boxcover.webp'}>
