@@ -13,7 +13,7 @@ import BoxCardPackCarousel from 'components/BoxCardPackCarousel'
 import Overlay from 'components/Overlay'
 import { BoxCardPackProps } from 'components/BoxCardPack'
 import { GetStaticPaths } from 'next'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 const CARD_PER_PACK = 3
 const CARD_PER_PACK_SELECTION = 10
@@ -39,13 +39,13 @@ type PoolProps = {
 
 const rarities = { UR: '', SR: '', R: '', N: '' }
 
-type AllPoolsProps = {
-  [x in keyof typeof rarities]: PoolProps[]
-}
+// type AllPoolsProps = {
+//   [x in keyof typeof rarities]: PoolProps[]
+// }
 
-type CategoriesProps = {
-  [x in keyof typeof rarities]: CardProps[]
-}
+// type CategoriesProps = {
+//   [x in keyof typeof rarities]: CardProps[]
+// }
 
 function Boxes({
   boxes,
@@ -60,18 +60,80 @@ function Boxes({
   infos: BoxInfoType
   packs: CardProps[][]
 }) {
+  const [packIndex, setPackIndex] = useState<number>(0)
+  const [total, setTotal] = useState<number>(0)
+  const [displayOpenedCards, setDisplayOpenedCards] = useState<boolean>(false)
+  const [displayAnimation, setDisplayAnimation] = useState<boolean>(false)
   const [currentPacks, setCurrentPacks] = useState<CardProps[][]>([])
+  const [recycledCards, setRecycledCards] = useState<CardProps[]>([])
   const [displayOverlay, setDisplayOverlay] = useState<boolean>(false)
 
+  const recyclePack = () => {
+    console.log(packIndex)
+    console.log(currentPacks[packIndex])
+    console.log(currentPacks.length)
+    const cp: CardProps[][] = Object.assign([], currentPacks)
+    if (cp[packIndex].length > 0) {
+      const r = cp[packIndex].splice(0, 1)
+      console.log('card: ', r)
+      setRecycledCards(Object.assign([], sortCards([...recycledCards, ...r])))
+      setCurrentPacks(Object.assign([], cp))
+      if (cp[packIndex].length === 1) {
+        setDisplayAnimation(true)
+      } else {
+        setDisplayAnimation(false)
+      }
+    }
+    if (cp[packIndex].length === 0) {
+      console.log('cp length', cp.length)
+      setCurrentPacks(Object.assign([], cp))
+      console.log('cp length', cp.length)
+      if (cp.length === 1) {
+        setDisplayOpenedCards(true)
+        console.log('display: ', displayOpenedCards)
+      } else {
+        const index = packIndex
+        console.log('index: ', index)
+        console.log('cp undefined', cp[packIndex])
+        cp.splice(index, 1)
+        console.log('cp: ', cp)
+        setCurrentPacks(Object.assign([], cp))
+      }
+    }
+    console.log(currentPacks[packIndex])
+  }
+
+  const sortCards = (cards: CardProps[]) => {
+    const cardsClone: CardProps[] = Object.assign([], cards)
+    const ur: CardProps[] = cardsClone
+      .filter((c) => c.rarity.match(/ur/i))
+      .sort((a, b) => b.name.localeCompare(a.name))
+    const sr: CardProps[] = cardsClone
+      .filter((c) => c.rarity.match(/sr/i))
+      .sort((a, b) => b.name.localeCompare(a.name))
+    const rare: CardProps[] = cardsClone
+      .filter((c) => c.rarity === 'R')
+      .sort((a, b) => b.name.localeCompare(a.name))
+    const normal: CardProps[] = cardsClone
+      .filter((c) => c.rarity === 'N')
+      .sort((a, b) => b.name.localeCompare(a.name))
+
+    return [...ur, ...sr, ...rare, ...normal]
+  }
+
   const bringPacks = (amount: number) => {
+    setDisplayOpenedCards(false)
     const p = Object.assign([], packs)
-    return p.slice(0, amount)
+    return p.splice(total, amount)
   }
 
   const controlPackOpening = async (amount: number) => {
-    console.log(packs.length, amount)
-    console.log('packs generated: ', packs)
+    setRecycledCards([])
     const cp = bringPacks(amount)
+    console.log('pack: ', cp)
+    let t: number = total
+    t += amount
+    setTotal(t)
     setDisplayOverlay(true)
     setCurrentPacks(Object.assign([], cp))
   }
@@ -79,13 +141,43 @@ function Boxes({
   return (
     <Home>
       {currentPacks && currentPacks.length > 0 && (
-        <Overlay show={displayOverlay}>
+        <Overlay
+          show={displayOverlay}
+          scroll={displayOpenedCards}
+          hideOverlay={() => setDisplayOverlay(false)}
+        >
           <Container>
-            <CardGrid>
-              {currentPacks[0].map((card, index) => {
-                return <Card key={index} {...card} />
-              })}
-            </CardGrid>
+            {displayOpenedCards && (
+              <div style={{ padding: '5rem 0' }}>
+                <Heading size="normal" color="light">
+                  Cards obtained -{' '}
+                  <Button onClick={() => controlPackOpening(1)} color="primary">
+                    Open another pack
+                  </Button>
+                </Heading>
+                <CardGrid>
+                  {recycledCards &&
+                    recycledCards.map((card, index) => {
+                      return <Card index={index} {...card} key={index} />
+                    })}
+                </CardGrid>
+              </div>
+            )}
+            {!displayOpenedCards && (
+              <R.PackOpeningWrapper>
+                {currentPacks[packIndex].map((card, index) => {
+                  return (
+                    <Card
+                      playBlurAnimation={displayAnimation}
+                      size="full"
+                      key={index}
+                      {...card}
+                      recycle={recyclePack}
+                    />
+                  )
+                })}
+              </R.PackOpeningWrapper>
+            )}
           </Container>
         </Overlay>
       )}
@@ -143,7 +235,7 @@ function Boxes({
         <CardGrid>
           {cards &&
             cards.map((card, index) => {
-              return <Card key={index} {...card} />
+              return <Card recycle={recyclePack} key={index} {...card} />
             })}
         </CardGrid>
       </Container>

@@ -146,10 +146,7 @@ const cardModifiers = {
           border: 5px solid transparent;
           ${rarity && rarityModifier[rarity!]};
           border-image-slice: 1;
-          ${playBlurAnimation &&
-          css`
-            border: none;
-          `}
+          border: none;
         `}
       }
       > span:nth-of-type(1) {
@@ -203,10 +200,10 @@ const cardModifiers = {
           transform: translate(0, 0) rotate(-10deg);
         }
         50% {
-          transform: translate(-20rem, 20rem) rotate(-30deg);
+          transform: translate(-30rem, 30rem) rotate(-30deg);
         }
         100% {
-          transform: translate(-50rem, 50rem) rotate(-60deg);
+          transform: translate(-60rem, 60rem) rotate(-60deg);
         }
       }
       @keyframes dropAnimationRight {
@@ -214,10 +211,10 @@ const cardModifiers = {
           transform: translate(0, 0) rotate(10deg);
         }
         50% {
-          transform: translate(20rem, 20rem) rotate(30deg);
+          transform: translate(30rem, 30rem) rotate(30deg);
         }
         100% {
-          transform: translate(50rem, 50rem) rotate(60deg);
+          transform: translate(60rem, 60rem) rotate(60deg);
         }
       }
     }

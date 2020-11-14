@@ -120,3 +120,48 @@ export const BoxInfosContainer = styled.div`
     margin-right: 1.2rem;
   }
 `
+export const PackOpeningWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  > div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  > div:nth-child(1) {
+    z-index: 70;
+  }
+  > div:nth-child(2) {
+    z-index: 69;
+  }
+  > div:nth-child(3) {
+    z-index: 68;
+  }
+  > div:nth-child(4) {
+    z-index: 67;
+  }
+  > div:nth-child(5) {
+    z-index: 66;
+  }
+  > div:nth-child(6) {
+    z-index: 65;
+  }
+  > div:nth-child(7) {
+    z-index: 64;
+  }
+  > div:nth-child(8) {
+    z-index: 63;
+  }
+  > div:nth-child(9) {
+    z-index: 62;
+  }
+  > div:nth-child(10) {
+    z-index: 61;
+  }
+`
