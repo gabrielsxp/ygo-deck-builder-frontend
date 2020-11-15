@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components'
 import { rgba } from 'polished'
+import { BoxCardPackProps } from '.'
 
 export const Image = styled.img`
   position: absolute;
@@ -10,6 +11,47 @@ export const Image = styled.img`
   width: 100%;
   height: 100%;
   object-fit: contain;
+`
+
+export const ImageWrapper = styled.div<
+  Pick<BoxCardPackProps, 'full' | 'slashAnimation'>
+>`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  ${({ full, slashAnimation, theme }) => css`
+    ${full &&
+    slashAnimation &&
+    css`
+      height: 50rem;
+      > span {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 25rem;
+        height: 50rem;
+        border-radius: 0rem;
+        z-index: 200;
+        background-color: ${theme.colors.white};
+        filter: blur(2rem);
+        opacity: 0;
+        animation: fadeAway 1.25s 0.75s ease-in-out forwards;
+      }
+    `};
+  `};
+  @keyframes fadeAway {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
 `
 
 export const NameContainer = styled.div`

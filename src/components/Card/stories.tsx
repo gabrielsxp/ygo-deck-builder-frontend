@@ -212,21 +212,27 @@ FullUR.args = {
   ...data,
   rarity: 'UR',
   size: 'full',
-  playAnimation: true
+  playAnimation: true,
+  showImages: true,
+  displayRarity: true
 }
 
 FullSR.args = {
   ...data,
   size: 'full',
   rarity: 'SR',
-  playAnimation: true
+  playAnimation: true,
+  showImages: true,
+  displayRarity: true
 }
 
 FullR.args = {
   ...data,
   size: 'full',
   rarity: 'R',
-  playAnimation: true
+  playAnimation: true,
+  showImages: true,
+  displayRarity: true
 }
 
 FullN.args = {

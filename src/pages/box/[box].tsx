@@ -3,9 +3,9 @@ import axios from 'client'
 import Heading from 'components/Heading'
 import CardGrid from 'components/CardGrid'
 import Card, { CardProps } from 'components/Card'
+import BoxCardPack from 'components/BoxCardPack'
 import { Container } from 'components/Container'
 import * as S from 'templates/Home/styles'
-import * as R from 'pages/styles'
 import Header from 'components/Header'
 import Button from 'components/Button'
 import MediaMatch from 'components/MediaMatch'
@@ -13,10 +13,7 @@ import BoxCardPackCarousel from 'components/BoxCardPackCarousel'
 import Overlay from 'components/Overlay'
 import { BoxCardPackProps } from 'components/BoxCardPack'
 import { GetStaticPaths } from 'next'
-import { useState } from 'react'
-
-const CARD_PER_PACK = 3
-const CARD_PER_PACK_SELECTION = 10
+import { useState, useEffect } from 'react'
 
 type BoxInfoType = {
   total?: number
@@ -31,11 +28,6 @@ type CardReturnType = {
   boxFound: number
   cards: CardProps[]
 } & BoxInfoType
-
-type PoolProps = {
-  [x: string]: number
-  originalIndex: number
-}
 
 type ObtainedCardProps = {
   [x: string]: number
@@ -57,6 +49,7 @@ function Boxes({
   obtained: ObtainedCardProps
 }) {
   const [packIndex] = useState<number>(0)
+  const [boxReseted, setBoxReseted] = useState<boolean>(false)
   const [total, setTotal] = useState<number>(0)
   const [displayOpenedCards, setDisplayOpenedCards] = useState<boolean>(false)
   const [displayAnimation, setDisplayAnimation] = useState<boolean>(false)
@@ -66,6 +59,21 @@ function Boxes({
   const [obtainedCards, setObtainedCads] = useState<ObtainedCardProps>({
     ...obtained
   })
+  const [displayPack, setDisplayPack] = useState<boolean>(false)
+  const [clickedPack, setClickedPack] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (
+      currentPacks &&
+      currentPacks[packIndex] &&
+      currentPacks[packIndex]?.length ===
+        (new RegExp(/selection/i).test(box?.name) ? 10 : 3)
+    ) {
+      setDisplayPack(true)
+    } else {
+      setDisplayPack(false)
+    }
+  }, [box?.name, currentPacks, packIndex])
 
   const skipPackOpening = () => {
     let cp = Object.assign([], currentPacks)
@@ -77,6 +85,45 @@ function Boxes({
     setDisplayAnimation(false)
 
     setDisplayOpenedCards(true)
+  }
+
+  const clickPack = () => {
+    setClickedPack(true)
+    setTimeout(() => {
+      setClickedPack(false)
+      setDisplayPack(false)
+    }, 2500)
+  }
+
+  const skipPackOpeningAndClose = () => {
+    let cp = Object.assign([], currentPacks)
+    cp = cp.reduce((acc, pack) => {
+      acc = acc.concat(...pack)
+      return acc
+    }, [])
+    setRecycledCards(Object.assign([], sortCards([...cp, ...recycledCards])))
+    setDisplayAnimation(false)
+
+    setDisplayOverlay(false)
+  }
+
+  const shuffleCards = (p: CardProps[][]) => {
+    const array = Object.assign([], p)
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[array[i], array[j]] = [array[j], array[i]]
+    }
+    return array
+  }
+
+  const resetBox = () => {
+    setTotal(0)
+    setRecycledCards([])
+    setBoxReseted(true)
+  }
+
+  const resetObtainedCards = () => {
+    setObtainedCads(Object.assign({}, { ...obtained }))
   }
 
   const recyclePack = () => {
@@ -118,32 +165,38 @@ function Boxes({
     const cardsClone: CardProps[] = Object.assign([], cards)
     const ur: CardProps[] = cardsClone
       .filter((c) => c.rarity.match(/ur/i))
-      .sort((a, b) => b.name.localeCompare(a.name))
+      .sort((a, b) => b?.name.localeCompare(a?.name))
     const sr: CardProps[] = cardsClone
       .filter((c) => c.rarity.match(/sr/i))
-      .sort((a, b) => b.name.localeCompare(a.name))
+      .sort((a, b) => b?.name.localeCompare(a?.name))
     const rare: CardProps[] = cardsClone
       .filter((c) => c.rarity === 'R')
-      .sort((a, b) => b.name.localeCompare(a.name))
+      .sort((a, b) => b?.name.localeCompare(a?.name))
     const normal: CardProps[] = cardsClone
       .filter((c) => c.rarity === 'N')
-      .sort((a, b) => b.name.localeCompare(a.name))
+      .sort((a, b) => b?.name.localeCompare(a?.name))
 
     return [...ur, ...sr, ...rare, ...normal]
   }
 
   const bringPacks = (amount: number) => {
     setDisplayOpenedCards(false)
-    const p = Object.assign([], packs)
-    return p.splice(total, amount)
+    let p: CardProps[][] = []
+    if (boxReseted) {
+      p = shuffleCards(Object.assign([], packs))
+      setBoxReseted(false)
+    } else {
+      p = Object.assign([], packs)
+    }
+    return p?.splice(total, amount)
   }
 
   const controlPackOpening = async (amount: number) => {
     setRecycledCards([])
     const cp = bringPacks(amount)
-    const t = cp.length + total
+    const t = cp?.length + total
     setTotal(t)
-    const allPacks = cp.reduce((acc, current) => {
+    const allPacks = cp?.reduce((acc, current) => {
       acc = acc.concat(...current)
       return acc
     }, [])
@@ -154,13 +207,13 @@ function Boxes({
     const currentCardsByAmount = rs.reduce(
       (acc: { [x: string]: number }, card) => {
         console.log('card:', card)
-        const currentCard: string = card.name
+        const currentCard: string = card?.name
         console.log('current card: ', currentCard)
-        if (!checked.find((c) => c.name === currentCard)) {
-          const amount = rs.filter((c) => c.name === currentCard).length
+        if (!checked.find((c) => c?.name === currentCard)) {
+          const amount = rs.filter((c) => c?.name === currentCard)?.length
           console.log('amount: ', amount)
           console.log('card name: ', currentCard)
-          acc[`${card.name}`] += amount
+          acc[`${card?.name}`] += amount
           checked.push(card)
         }
         return acc
@@ -175,12 +228,13 @@ function Boxes({
 
   return (
     <Home>
-      {currentPacks && currentPacks.length > 0 && (
+      {currentPacks && currentPacks?.length > 0 && (
         <Overlay
           show={displayOverlay}
           scroll={displayOpenedCards}
           hideOverlay={() => setDisplayOverlay(false)}
           skip={skipPackOpening}
+          skipAndClose={skipPackOpeningAndClose}
           displaySkipButton={!displayOpenedCards}
         >
           <Container>
@@ -201,84 +255,150 @@ function Boxes({
               </div>
             )}
             {!displayOpenedCards && (
-              <R.PackOpeningWrapper>
+              <S.PackOpeningWrapper>
+                {displayPack && (
+                  <BoxCardPack
+                    name={box?.name}
+                    slug={box?.slug}
+                    image={box?.image}
+                    full
+                    slashAnimation={clickedPack}
+                    clickCallback={clickPack}
+                  />
+                )}
                 {currentPacks[packIndex] &&
-                  currentPacks[packIndex].length > 0 &&
-                  currentPacks[packIndex].map((card, index) => {
+                  currentPacks[packIndex]?.length > 0 &&
+                  currentPacks[packIndex]?.map((card, index) => {
                     return (
                       <Card
+                        playAnimation={
+                          index === currentPacks[packIndex]?.length - 1 &&
+                          displayPack
+                        }
+                        showImages={!displayPack}
                         playBlurAnimation={displayAnimation}
                         size="full"
                         key={index}
                         {...card}
                         recycle={recyclePack}
+                        displayRarity={!displayPack}
                       />
                     )
                   })}
-              </R.PackOpeningWrapper>
+              </S.PackOpeningWrapper>
             )}
           </Container>
         </Overlay>
       )}
-      <Header name={box.name} image={box.cover ?? '/img/boxcover.webp'}>
+      <Header
+        name={box?.name}
+        image={
+          box?.cover ??
+          'https://res.cloudinary.com/yugiohdeckbuilder/image/upload/v1605463178/boxcover_n1h2yw.webp'
+        }
+      >
         <MediaMatch greaterThan="medium">
-          <R.ButtonContainer>
-            <p>{box.name}</p>
-            {/* <span>Total cards: {cards.cards.total}</span> */}
-            <div>
-              <Button
-                onClick={() => controlPackOpening(1)}
-                color="primary"
-                size="large"
-              >
-                Open 1 pack
+          <S.ButtonContainer>
+            <p>{box?.name}</p>
+            <span>Packs opened: {total}</span>
+            {total < packs?.length ? (
+              <div>
+                <Button
+                  onClick={() => controlPackOpening(1)}
+                  color="primary"
+                  size="large"
+                >
+                  Open 1 pack
+                </Button>
+                <Button
+                  onClick={() => controlPackOpening(10)}
+                  color="primary"
+                  size="large"
+                >
+                  Open 10 packs
+                </Button>
+              </div>
+            ) : (
+              <Button color="primary" onClick={() => resetBox()}>
+                Reset box
               </Button>
-              <Button
-                onClick={() => controlPackOpening(10)}
-                color="primary"
-                size="large"
-              >
-                Open 10 packs
-              </Button>
-            </div>
-          </R.ButtonContainer>
+            )}
+            <S.ButtonContainer style={{ marginTop: '1.2rem' }}>
+              <div>
+                <Button color="primary" onClick={() => resetBox()}>
+                  Reset box
+                </Button>
+                <Button color="primary" onClick={() => resetObtainedCards()}>
+                  Reset obtained cards
+                </Button>
+              </div>
+            </S.ButtonContainer>
+          </S.ButtonContainer>
         </MediaMatch>
       </Header>
       <Container>
+        <MediaMatch lessThan="medium">
+          <S.ButtonContainer>
+            <p>{box?.name}</p>
+            <span>Packs opened: {total}</span>
+            {total < packs?.length ? (
+              <div>
+                <Button
+                  onClick={() => controlPackOpening(1)}
+                  color="primary"
+                  size="large"
+                >
+                  Open 1 pack
+                </Button>
+                <Button
+                  onClick={() => controlPackOpening(10)}
+                  color="primary"
+                  size="large"
+                >
+                  Open 10 packs
+                </Button>
+              </div>
+            ) : (
+              <Button color="primary" onClick={() => resetBox()}>
+                Reset box
+              </Button>
+            )}
+          </S.ButtonContainer>
+        </MediaMatch>
         <S.SectionTitles>
           <Heading size="large" color="primary">
             Cards in this box
           </Heading>
           <Heading size="small" color="light">
-            All cards presents in the box: {cards.length}
+            All cards presents in the box: {cards?.length}
           </Heading>
-          <R.BoxInfosContainer>
-            <R.Label>
-              <R.LabelDescription>UR: </R.LabelDescription>
-              {infos.UR}
-            </R.Label>
-            <R.Label>
-              <R.LabelDescription>SR: </R.LabelDescription>
-              {infos.SR}
-            </R.Label>
-            <R.Label>
-              <R.LabelDescription>R: </R.LabelDescription>
-              {infos.R}
-            </R.Label>
-            <R.Label>
-              <R.LabelDescription>N: </R.LabelDescription>
-              {infos.N}
-            </R.Label>
-          </R.BoxInfosContainer>
+          <S.BoxInfosContainer>
+            <S.Label>
+              <S.LabelDescription>UR: </S.LabelDescription>
+              {infos?.UR}
+            </S.Label>
+            <S.Label>
+              <S.LabelDescription>SR: </S.LabelDescription>
+              {infos?.SR}
+            </S.Label>
+            <S.Label>
+              <S.LabelDescription>R: </S.LabelDescription>
+              {infos?.R}
+            </S.Label>
+            <S.Label>
+              <S.LabelDescription>N: </S.LabelDescription>
+              {infos?.N}
+            </S.Label>
+          </S.BoxInfosContainer>
         </S.SectionTitles>
         <CardGrid>
           {cards &&
             cards.map((card, index) => {
               return (
                 <Card
-                  amountBadge={card.rarity === 'SR' || card.rarity === 'UR'}
-                  amountObtained={obtainedCards[card.name]}
-                  grayscale={!obtainedCards[card.name]}
+                  amountBadge={card?.rarity === 'SR' || card?.rarity === 'UR'}
+                  amountObtained={obtainedCards[card?.name]}
+                  grayscale={!obtainedCards[card?.name]}
                   key={index}
                   {...card}
                 />
@@ -310,13 +430,13 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths,
-    fallback: true
+    fallback: false
   }
 }
 
 export async function getStaticProps({ params }: { params: { box: string } }) {
   const boxes = await axios('boxes?all=true')
-  let box = {}
+  let box: BoxCardPackProps | null = null
   if (Array.isArray(boxes)) {
     box = boxes.find((b) => b.slug.match(params.box))
   }
@@ -325,38 +445,53 @@ export async function getStaticProps({ params }: { params: { box: string } }) {
   )
   let cards: CardProps[] = []
   let infos: BoxInfoType = {}
-  cards = cardsResponse[0].cards
-  infos = {
-    total: cardsResponse[0]?.total,
-    N: cardsResponse[0]?.N,
-    R: cardsResponse[0]?.R,
-    SR: cardsResponse[0]?.SR,
-    UR: cardsResponse[0]?.UR
+  if (cardsResponse[0]) {
+    cards = cardsResponse[0].cards
+    infos = {
+      total: cardsResponse[0]?.total,
+      N: cardsResponse[0]?.N,
+      R: cardsResponse[0]?.R,
+      SR: cardsResponse[0]?.SR,
+      UR: cardsResponse[0]?.UR
+    }
+  } else {
+    cards = []
+    infos = {
+      total: 0,
+      N: 0,
+      R: 0,
+      SR: 0,
+      UR: 0
+    }
   }
-
   const urCards = cards.filter((c) => c.rarity === 'UR')
   const srCards = cards.filter((c) => c.rarity === 'SR')
   const rCards = cards.filter((c) => c.rarity === 'R')
   const nCards = cards.filter((c) => c.rarity === 'N')
   const pools = {
     UR: urCards.map((c, index) => {
-      return { [c.name]: c.boxAmount, originalIndex: index }
+      const cName = c?.name ?? ''
+      return { [cName]: c.boxAmount, originalIndex: index }
     }),
     SR: srCards.map((c, index) => {
-      return { [c.name]: c.boxAmount, originalIndex: index }
+      const cName = c?.name ?? ''
+      return { [cName]: c.boxAmount, originalIndex: index }
     }),
     R: rCards.map((c, index) => {
-      return { [c.name]: c.boxAmount, originalIndex: index }
+      const cName = c?.name ?? ''
+      return { [cName]: c.boxAmount, originalIndex: index }
     }),
     N: nCards.map((c, index) => {
-      return { [c.name]: c.boxAmount, originalIndex: index }
+      const cName = c?.name ?? ''
+      return { [cName]: c.boxAmount, originalIndex: index }
     })
   }
 
   //set obtained cards structure
   const obtained = cards.reduce(
     (acc: { [x: string]: number }, card: CardProps) => {
-      acc[card.name] = 0
+      const cName = card?.name ?? ''
+      acc[cName] = 0
       return acc
     },
     {}
@@ -383,7 +518,8 @@ export async function getStaticProps({ params }: { params: { box: string } }) {
   let poolsClone = Object.assign({}, pools)
 
   const getCommonCardsFromPool = (
-    type: 'only normals' | 'only rares' | 'mixed'
+    type: 'only normals' | 'only rares' | 'mixed',
+    onlyOne: boolean
   ) => {
     const firstCardType =
       type === 'only normals' ? 'N' : type === 'only rares' ? 'R' : 'N'
@@ -391,15 +527,15 @@ export async function getStaticProps({ params }: { params: { box: string } }) {
       type === 'only normals' ? 'N' : type === 'only rares' ? 'R' : 'R'
     poolsClone = Object.assign({}, pools)
     if (
-      poolsClone[firstCardType].length === 0 &&
-      poolsClone[lastCardType].length === 0
+      poolsClone[firstCardType]?.length === 0 &&
+      poolsClone[lastCardType]?.length === 0
     ) {
       return null
     }
     // get a random normal card
     const firstCardIndex: number = getRandomIndex(
       0,
-      poolsClone[firstCardType].length - 1
+      poolsClone[firstCardType]?.length - 1
     )
     const firstCardOn = poolsClone[firstCardType][firstCardIndex]
     if (!firstCardOn) {
@@ -410,10 +546,13 @@ export async function getStaticProps({ params }: { params: { box: string } }) {
     if (firstCard) {
       firstCardName = Object.keys(firstCard)[0]
     }
+    if (onlyOne) {
+      return [firstCard]
+    }
     // get a random rare card
     const lastCardIndex: number = getRandomIndex(
       0,
-      poolsClone[lastCardType].length - 1
+      poolsClone[lastCardType]?.length - 1
     )
     const lastCardOn = poolsClone[lastCardType][lastCardIndex]
     if (!lastCardOn) {
@@ -443,21 +582,29 @@ export async function getStaticProps({ params }: { params: { box: string } }) {
 
   const getRareCardFromPool = () => {
     poolsClone = Object.assign({}, pools)
+    if (!poolsClone['UR']) {
+      poolsClone = {
+        UR: [],
+        SR: [],
+        R: [],
+        N: []
+      }
+    }
     const type =
-      poolsClone['UR'].length > 0
+      poolsClone['UR']?.length > 0
         ? 'UR'
-        : poolsClone['SR'].length > 0
+        : poolsClone['SR']?.length > 0
         ? 'SR'
-        : poolsClone['R'].length > 0
+        : poolsClone['R']?.length > 0
         ? 'R'
-        : poolsClone['N'].length > 0
+        : poolsClone['N']?.length > 0
         ? 'N'
         : null
     if (type === null) {
       return null
     }
     // get a random ultra or super rare card from pool
-    const cardIndex: number = getRandomIndex(0, poolsClone[type].length - 1)
+    const cardIndex: number = getRandomIndex(0, poolsClone[type]?.length - 1)
 
     const card = poolsClone[type][cardIndex]
     let cardName = ''
@@ -480,13 +627,34 @@ export async function getStaticProps({ params }: { params: { box: string } }) {
     return [returnedCard]
   }
 
-  const generatePack = () => {
-    // const amountPerPack: number = box.name.match(/selection/i)
-    //   ? CARD_PER_PACK_SELECTION
-    //   : CARD_PER_PACK
-    const randomCommonCards: CardProps[] | null = getCommonCardsFromPool(
-      returnCommonTypeOfSort(getRandomIndex(0, 100))
-    )
+  const generatePack = (selection: boolean) => {
+    let randomCommonCards: CardProps[] | null = []
+    if (selection) {
+      let acc: CardProps[] | null = []
+      const aux: CardProps[] = []
+      for (let i = 0; i < 4; i++) {
+        acc = getCommonCardsFromPool(
+          returnCommonTypeOfSort(getRandomIndex(0, 100)),
+          false
+        )
+        if (acc !== null) {
+          aux.push(...acc)
+        }
+      }
+      acc = getCommonCardsFromPool(
+        returnCommonTypeOfSort(getRandomIndex(0, 100)),
+        true
+      )
+      if (acc !== null) {
+        aux.push(...acc)
+      }
+      randomCommonCards = aux
+    } else {
+      randomCommonCards = getCommonCardsFromPool(
+        returnCommonTypeOfSort(getRandomIndex(0, 100)),
+        false
+      )
+    }
     let rareCards: CardProps[] | null = []
     rareCards = getRareCardFromPool()
     if (randomCommonCards !== null && rareCards !== null) {
@@ -496,7 +664,14 @@ export async function getStaticProps({ params }: { params: { box: string } }) {
       return null
     }
   }
-
+  if (!Object.keys(infos).find((k) => k === 'UR')) {
+    infos = {
+      UR: 0,
+      SR: 0,
+      R: 0,
+      N: 0
+    }
+  }
   const generateAllPacks = async () => {
     const p: CardProps[][] | null = []
     const threshold =
@@ -514,8 +689,9 @@ export async function getStaticProps({ params }: { params: { box: string } }) {
         ? 36
         : 0
     return new Promise<CardProps[][]>((resolve) => {
+      const isSelectionBox = new RegExp(/selection/i).test(box?.name ?? '')
       for (let i = 0; i < threshold; i++) {
-        const gen = generatePack()
+        const gen = generatePack(isSelectionBox)
         if (!gen) {
           break
         }
@@ -527,7 +703,7 @@ export async function getStaticProps({ params }: { params: { box: string } }) {
 
   const shuffleArray = (p: CardProps[][]) => {
     const array = Object.assign([], p)
-    for (let i = array.length - 1; i > 0; i--) {
+    for (let i = array?.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
       ;[array[i], array[j]] = [array[j], array[i]]
     }

@@ -1,4 +1,4 @@
-import * as S from './styles'
+import * as S from 'templates/Home/styles'
 import Home from 'templates/Home'
 import { Container } from 'components/Container'
 import Hero, { HeroProps } from 'components/Hero'

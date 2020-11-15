@@ -4,7 +4,6 @@ import Heading from 'components/Heading'
 import { Container } from 'components/Container'
 import BoxCardPackCarousel from 'components/BoxCardPackCarousel'
 import * as S from 'templates/Home/styles'
-import * as R from './styles'
 import BoxCardPack from 'components/BoxCardPack'
 
 function Boxes({ selectionBoxes = [], boxes = [] }) {
@@ -18,7 +17,7 @@ function Boxes({ selectionBoxes = [], boxes = [] }) {
           color="dark"
         />
       </Container>
-      <R.SectionWrapperAnimated>
+      <S.SectionWrapperAnimated>
         <img src="/img/shape1.webp" id="pattern-1" alt="animation shape 1" />
         <img src="/img/shape2.webp" id="pattern-2" alt="animation shape 1" />
         <img src="/img/shape3.webp" id="pattern-3" alt="animation shape 1" />
@@ -42,7 +41,7 @@ function Boxes({ selectionBoxes = [], boxes = [] }) {
             </S.Grid>
           </S.SectionTitles>
         </Container>
-      </R.SectionWrapperAnimated>
+      </S.SectionWrapperAnimated>
     </Home>
   )
 }

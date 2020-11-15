@@ -4,7 +4,7 @@ import { CardProps } from '.'
 import { rgba } from 'polished'
 
 const rarityModifier = {
-  UR: () => css`
+  UR: (playAnimation: boolean) => css`
     border-image: linear-gradient(
       to bottom right,
       #b827fc 0%,
@@ -13,22 +13,35 @@ const rarityModifier = {
       #fec837 75%,
       #fd1892 100%
     );
+    border-radius: 50%;
+    ${!playAnimation &&
+    css`
+      border: none;
+    `}
   `,
-  SR: () => css`
+  SR: (playAnimation: boolean) => css`
     border-image: linear-gradient(
       to bottom right,
       #f7e500 0%,
       #ffbb00 50%,
       #fdeb00 100%
     );
+    ${!playAnimation &&
+    css`
+      border: none;
+    `}
   `,
-  R: () => css`
+  R: (playAnimation: boolean) => css`
     border-image: linear-gradient(
       to bottom right,
       #2a44e9 0%,
       #338cfa 50%,
       #2e77f2 100%
     );
+    ${!playAnimation &&
+    css`
+      border: none;
+    `}
   `,
   N: () => css`
     border-image: none;
@@ -143,9 +156,9 @@ const cardModifiers = {
           left: -25rem;
           z-index: ${theme.layers.backgroundOverlay1};
           border: 5px solid transparent;
-          ${rarity && rarityModifier[rarity!]};
+          ${rarity && rarityModifier[rarity!](playAnimation)};
           border-image-slice: 1;
-          border: none;
+          /* border: none; */
         `}
       }
       > span:nth-of-type(1) {
@@ -196,7 +209,7 @@ const cardModifiers = {
       }
       @keyframes dropAnimationLeft {
         0% {
-          transform: translate(0, 0) rotate(-10deg);
+          transform: translate(0, 0) rotate(30deg);
         }
         50% {
           transform: translate(-30rem, 30rem) rotate(-30deg);
@@ -207,13 +220,13 @@ const cardModifiers = {
       }
       @keyframes dropAnimationRight {
         0% {
-          transform: translate(0, 0) rotate(10deg);
+          transform: translate(0, 0) rotate(-30deg);
         }
         50% {
-          transform: translate(30rem, 30rem) rotate(30deg);
+          transform: translate(10rem, 30rem) rotate(30deg);
         }
         100% {
-          transform: translate(60rem, 60rem) rotate(60deg);
+          transform: translate(20rem, 60rem) rotate(60deg);
         }
       }
     }
@@ -286,7 +299,26 @@ export const Image = styled.img`
   left: 0;
   width: 100%;
   height: 100%;
-  ${({ grayscale }: Pick<CardProps, 'grayscale'>) => css`
+  opacity: 0;
+  ${({
+    grayscale,
+    showImages,
+    size
+  }: Pick<CardProps, 'grayscale' | 'showImages' | 'size'>) => css`
+    ${showImages &&
+    size === 'full' &&
+    css`
+      opacity: 1;
+    `}
+    ${!showImages &&
+    size === 'full' &&
+    css`
+      opacity: 0;
+    `}
+    ${size === 'normal' &&
+    css`
+      opacity: 1;
+    `}
     ${grayscale &&
     css`
       filter: grayscale(1);

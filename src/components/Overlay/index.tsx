@@ -9,6 +9,7 @@ export type OverlayProps = {
   hideOverlay: () => void
   scroll?: boolean
   skip?: () => void
+  skipAndClose?: () => void
   displaySkipButton?: boolean
 }
 
@@ -18,6 +19,7 @@ const Overlay = ({
   hideOverlay,
   scroll = false,
   skip = () => ({}),
+  skipAndClose = () => ({}),
   displaySkipButton = false
 }: OverlayProps) => {
   useEffect(() => {
@@ -40,6 +42,9 @@ const Overlay = ({
           <S.ButtonWrapper>
             <Button onClick={() => skip()} color="primary">
               Skip pack opening
+            </Button>
+            <Button onClick={() => skipAndClose()} color="secondary">
+              Skip and close results
             </Button>
           </S.ButtonWrapper>
         )}

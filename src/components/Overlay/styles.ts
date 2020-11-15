@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components'
 import { rgba } from 'polished'
 import { OverlayProps } from '.'
+import media from 'styled-media-query'
 
 type OverlayPartialProps = Pick<OverlayProps, 'show' | 'scroll'>
 
@@ -59,4 +60,14 @@ export const ButtonWrapper = styled.div`
   left: 50%;
   transform: translateX(-50%);
   z-index: 90;
+  & > button:first-child {
+    margin-right: 1.2rem;
+  }
+  ${media.lessThan('medium')`
+    top: 1.5rem;
+    & > button:first-child {
+      margin-right: 0;
+      margin-bottom: 1.2rem;
+    }
+  `}
 `

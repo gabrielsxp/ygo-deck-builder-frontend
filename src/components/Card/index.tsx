@@ -27,6 +27,7 @@ export type CardProps = {
   grayscale?: boolean
   amountBadge?: boolean
   amountObtained?: number
+  showImages?: boolean
   recycle?: () => void
 }
 
@@ -53,7 +54,8 @@ const Card = ({
   grayscale = false,
   recycle,
   amountBadge = false,
-  amountObtained = 0
+  amountObtained = 0,
+  showImages = false
 }: CardProps) => {
   const [canClick, setCanClick] = useState<boolean>(true)
   const [dropState, setDropState] = useState<string>('')
@@ -72,10 +74,12 @@ const Card = ({
   }
 
   const injectDropClass = () => {
-    if (!canClick) {
-      return
-    }
     if (size === 'full') {
+      console.warn('can click: ', canClick)
+      if (!canClick) {
+        return
+      }
+      setCanClick(false)
       const possibleClasses = ['drop-right', 'drop-left']
       const index = getRandomIndex(0, possibleClasses.length - 1)
       const className = possibleClasses[index]
@@ -88,7 +92,7 @@ const Card = ({
             setCanClick(true)
           }
         }
-      }, 500)
+      }, 250)
     }
   }
 
@@ -124,10 +128,21 @@ const Card = ({
         </S.RarityBadge>
       )}
       {card_images && card_images.length > 0 && (
-        <S.Image grayscale={grayscale} alt={name} src={card_images[0]} />
+        <S.Image
+          showImages={showImages}
+          grayscale={grayscale}
+          alt={name}
+          src={card_images[0]}
+          size={size}
+        />
       )}
       {!card_images && (
-        <S.Image grayscale={grayscale} alt={name} src="/img/card-back.webp" />
+        <S.Image
+          showImages={showImages}
+          grayscale={grayscale}
+          alt={name}
+          src="/img/card-back.webp"
+        />
       )}
       <S.CardInfoContainer aria-label="Card infos container">
         <Heading aria-hidden="true" size="small" color="light">
