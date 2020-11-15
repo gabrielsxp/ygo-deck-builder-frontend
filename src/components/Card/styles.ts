@@ -77,7 +77,6 @@ const cardModifiers = {
     &:hover > div {
       display: block;
     }
-
     ${media.between('medium', 'large')`
       height: 15rem;
     `}
@@ -97,7 +96,7 @@ const cardModifiers = {
     max-width: 30rem;
     height: min(80vh, 40rem);
     &.drop-left {
-      transform-origin: right bottom;
+      transform-origin: right top;
       animation: dropAnimationLeft 0.5s linear forwards;
     }
     &.drop-right {
@@ -287,6 +286,12 @@ export const Image = styled.img`
   left: 0;
   width: 100%;
   height: 100%;
+  ${({ grayscale }: Pick<CardProps, 'grayscale'>) => css`
+    ${grayscale &&
+    css`
+      filter: grayscale(1);
+    `}
+  `}
 `
 export const CardInfoContainer = styled.div`
   ${({ theme }) => css`

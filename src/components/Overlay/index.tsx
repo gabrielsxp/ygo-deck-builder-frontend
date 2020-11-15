@@ -1,4 +1,5 @@
 import * as S from './styles'
+import Button from 'components/Button'
 import { useEffect } from 'react'
 import { CloseOutline as CloseIcon } from '@styled-icons/evaicons-outline/CloseOutline'
 
@@ -7,13 +8,17 @@ export type OverlayProps = {
   show?: boolean
   hideOverlay: () => void
   scroll?: boolean
+  skip?: () => void
+  displaySkipButton?: boolean
 }
 
 const Overlay = ({
   children,
   show = false,
   hideOverlay,
-  scroll = false
+  scroll = false,
+  skip = () => ({}),
+  displaySkipButton = false
 }: OverlayProps) => {
   useEffect(() => {
     const b = document.querySelector('body')
@@ -31,6 +36,13 @@ const Overlay = ({
         <S.CloseButton onClick={() => hideOverlay()}>
           <CloseIcon />
         </S.CloseButton>
+        {displaySkipButton && (
+          <S.ButtonWrapper>
+            <Button onClick={() => skip()} color="primary">
+              Skip pack opening
+            </Button>
+          </S.ButtonWrapper>
+        )}
         {children}
       </>
     </S.Wrapper>

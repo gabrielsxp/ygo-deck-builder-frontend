@@ -37,36 +37,47 @@ type PoolProps = {
   originalIndex: number
 }
 
-const rarities = { UR: '', SR: '', R: '', N: '' }
-
-// type AllPoolsProps = {
-//   [x in keyof typeof rarities]: PoolProps[]
-// }
-
-// type CategoriesProps = {
-//   [x in keyof typeof rarities]: CardProps[]
-// }
+type ObtainedCardProps = {
+  [x: string]: number
+}
 
 function Boxes({
   boxes,
   box,
   cards,
   infos,
-  packs
+  packs,
+  obtained
 }: {
   boxes: BoxCardPackProps[]
   box: BoxCardPackProps
   cards: CardProps[]
   infos: BoxInfoType
   packs: CardProps[][]
+  obtained: ObtainedCardProps
 }) {
-  const [packIndex, setPackIndex] = useState<number>(0)
+  const [packIndex] = useState<number>(0)
   const [total, setTotal] = useState<number>(0)
   const [displayOpenedCards, setDisplayOpenedCards] = useState<boolean>(false)
   const [displayAnimation, setDisplayAnimation] = useState<boolean>(false)
   const [currentPacks, setCurrentPacks] = useState<CardProps[][]>([])
   const [recycledCards, setRecycledCards] = useState<CardProps[]>([])
   const [displayOverlay, setDisplayOverlay] = useState<boolean>(false)
+  const [obtainedCards, setObtainedCads] = useState<ObtainedCardProps>({
+    ...obtained
+  })
+
+  const skipPackOpening = () => {
+    let cp = Object.assign([], currentPacks)
+    cp = cp.reduce((acc, pack) => {
+      acc = acc.concat(...pack)
+      return acc
+    }, [])
+    setRecycledCards(Object.assign([], sortCards([...cp, ...recycledCards])))
+    setDisplayAnimation(false)
+
+    setDisplayOpenedCards(true)
+  }
 
   const recyclePack = () => {
     console.log(packIndex)
@@ -130,10 +141,34 @@ function Boxes({
   const controlPackOpening = async (amount: number) => {
     setRecycledCards([])
     const cp = bringPacks(amount)
-    console.log('pack: ', cp)
-    let t: number = total
-    t += amount
+    const t = cp.length + total
     setTotal(t)
+    const allPacks = cp.reduce((acc, current) => {
+      acc = acc.concat(...current)
+      return acc
+    }, [])
+    const checked: CardProps[] = []
+    const rs: CardProps[] = Object.assign([], [...allPacks])
+    console.log('recycled: ', rs)
+
+    const currentCardsByAmount = rs.reduce(
+      (acc: { [x: string]: number }, card) => {
+        console.log('card:', card)
+        const currentCard: string = card.name
+        console.log('current card: ', currentCard)
+        if (!checked.find((c) => c.name === currentCard)) {
+          const amount = rs.filter((c) => c.name === currentCard).length
+          console.log('amount: ', amount)
+          console.log('card name: ', currentCard)
+          acc[`${card.name}`] += amount
+          checked.push(card)
+        }
+        return acc
+      },
+      { ...obtainedCards }
+    )
+    console.log('obtained: ', currentCardsByAmount)
+    setObtainedCads(Object.assign(currentCardsByAmount))
     setDisplayOverlay(true)
     setCurrentPacks(Object.assign([], cp))
   }
@@ -145,6 +180,8 @@ function Boxes({
           show={displayOverlay}
           scroll={displayOpenedCards}
           hideOverlay={() => setDisplayOverlay(false)}
+          skip={skipPackOpening}
+          displaySkipButton={!displayOpenedCards}
         >
           <Container>
             {displayOpenedCards && (
@@ -158,24 +195,26 @@ function Boxes({
                 <CardGrid>
                   {recycledCards &&
                     recycledCards.map((card, index) => {
-                      return <Card index={index} {...card} key={index} />
+                      return <Card {...card} key={index} />
                     })}
                 </CardGrid>
               </div>
             )}
             {!displayOpenedCards && (
               <R.PackOpeningWrapper>
-                {currentPacks[packIndex].map((card, index) => {
-                  return (
-                    <Card
-                      playBlurAnimation={displayAnimation}
-                      size="full"
-                      key={index}
-                      {...card}
-                      recycle={recyclePack}
-                    />
-                  )
-                })}
+                {currentPacks[packIndex] &&
+                  currentPacks[packIndex].length > 0 &&
+                  currentPacks[packIndex].map((card, index) => {
+                    return (
+                      <Card
+                        playBlurAnimation={displayAnimation}
+                        size="full"
+                        key={index}
+                        {...card}
+                        recycle={recyclePack}
+                      />
+                    )
+                  })}
               </R.PackOpeningWrapper>
             )}
           </Container>
@@ -208,7 +247,7 @@ function Boxes({
       <Container>
         <S.SectionTitles>
           <Heading size="large" color="primary">
-            Cards of this box
+            Cards in this box
           </Heading>
           <Heading size="small" color="light">
             All cards presents in the box: {cards.length}
@@ -235,7 +274,13 @@ function Boxes({
         <CardGrid>
           {cards &&
             cards.map((card, index) => {
-              return <Card recycle={recyclePack} key={index} {...card} />
+              return (
+                <Card
+                  grayscale={!obtainedCards[card.name]}
+                  key={index}
+                  {...card}
+                />
+              )
             })}
         </CardGrid>
       </Container>
@@ -305,6 +350,15 @@ export async function getStaticProps({ params }: { params: { box: string } }) {
       return { [c.name]: c.boxAmount, originalIndex: index }
     })
   }
+
+  //set obtained cards structure
+  const obtained = cards.reduce(
+    (acc: { [x: string]: number }, card: CardProps) => {
+      acc[card.name] = 0
+      return acc
+    },
+    {}
+  )
 
   const categories = {
     UR: urCards,
@@ -487,7 +541,8 @@ export async function getStaticProps({ params }: { params: { box: string } }) {
       boxes: Array.isArray(boxes) ? boxes.reverse().slice(0, 10) : [],
       cards,
       infos,
-      packs
+      packs,
+      obtained
     }
   }
 }

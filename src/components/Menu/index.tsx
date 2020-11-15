@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Link from 'next/link'
 import * as S from './styles'
 import Logo from 'components/Logo'
 import Button from 'components/Button'
@@ -26,12 +27,15 @@ const Menu = ({ username }: MenuProps) => {
       </S.LogoWrapper>
       <MediaMatch greaterThan="medium">
         <S.MenuGroup>
-          <S.MenuLink href="#" title="Latest Deck">
-            Latest Decks
-          </S.MenuLink>
-          <S.MenuLink href="#" title="Top Deck">
+          <Link href="/" passHref>
+            <S.MenuLink title="Home">Home</S.MenuLink>
+          </Link>
+          <Link href="boxes" passHref>
+            <S.MenuLink title="Boxes">Boxes</S.MenuLink>
+          </Link>
+          {/* <S.MenuLink href="#" title="Top Deck">
             Top Decks
-          </S.MenuLink>
+          </S.MenuLink> */}
         </S.MenuGroup>
       </MediaMatch>
 

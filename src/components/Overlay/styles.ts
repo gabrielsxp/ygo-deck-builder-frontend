@@ -53,3 +53,10 @@ export const CloseButton = styled.button`
     }
   `}
 `
+export const ButtonWrapper = styled.div`
+  position: absolute;
+  top: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 90;
+`

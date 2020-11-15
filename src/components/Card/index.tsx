@@ -24,6 +24,7 @@ export type CardProps = {
   dropAnimationLeft?: boolean
   dropAnimationRight?: boolean
   index?: number
+  grayscale?: boolean
   recycle?: () => void
 }
 
@@ -31,7 +32,7 @@ const Card = ({
   size = 'normal',
   how,
   displayRarity = true,
-  rarity,
+  rarity = 'N',
   card_images,
   name,
   attribute,
@@ -47,6 +48,7 @@ const Card = ({
   playBlurAnimation = false,
   dropAnimationLeft = false,
   dropAnimationRight = false,
+  grayscale = false,
   recycle
 }: CardProps) => {
   const [canClick, setCanClick] = useState<boolean>(true)
@@ -73,7 +75,7 @@ const Card = ({
           setDropState('')
           setCanClick(true)
         }
-      }, 500)
+      }, 200)
     }
   }
 
@@ -108,7 +110,10 @@ const Card = ({
         </S.RarityBadge>
       )}
       {card_images && card_images.length > 0 && (
-        <S.Image alt={name} src={card_images[0]} />
+        <S.Image grayscale={grayscale} alt={name} src={card_images[0]} />
+      )}
+      {!card_images && (
+        <S.Image grayscale={grayscale} alt={name} src="/img/card-back.webp" />
       )}
       <S.CardInfoContainer aria-label="Card infos container">
         <Heading aria-hidden="true" size="small" color="light">
