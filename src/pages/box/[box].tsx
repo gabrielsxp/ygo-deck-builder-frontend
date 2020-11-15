@@ -276,6 +276,8 @@ function Boxes({
             cards.map((card, index) => {
               return (
                 <Card
+                  amountBadge={card.rarity === 'SR' || card.rarity === 'UR'}
+                  amountObtained={obtainedCards[card.name]}
                   grayscale={!obtainedCards[card.name]}
                   key={index}
                   {...card}

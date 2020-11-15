@@ -336,3 +336,20 @@ export const StatusContainer = styled.div`
     margin-right: 1.2rem;
   }
 `
+export const AmountBadge = styled.div`
+  ${({ theme }) => css`
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 3rem;
+    height: 3rem;
+    background-color: ${rgba(theme.colors.secondary, 0.9)};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: ${theme.colors.white};
+    font-size: ${theme.font.sizes.small};
+    z-index: ${theme.layers.menu};
+    border-radius: 30% 0 0 0;
+  `}
+`

@@ -1,6 +1,6 @@
 import * as S from './styles'
 import Heading from 'components/Heading'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 export type CardProps = {
   name: string
@@ -25,6 +25,8 @@ export type CardProps = {
   dropAnimationRight?: boolean
   index?: number
   grayscale?: boolean
+  amountBadge?: boolean
+  amountObtained?: number
   recycle?: () => void
 }
 
@@ -49,10 +51,19 @@ const Card = ({
   dropAnimationLeft = false,
   dropAnimationRight = false,
   grayscale = false,
-  recycle
+  recycle,
+  amountBadge = false,
+  amountObtained = 0
 }: CardProps) => {
   const [canClick, setCanClick] = useState<boolean>(true)
   const [dropState, setDropState] = useState<string>('')
+
+  const isMounted = useRef(true)
+  useEffect(() => {
+    return () => {
+      isMounted.current = false
+    }
+  }, [])
 
   const getRandomIndex = (min: number, max: number) => {
     min = Math.ceil(min)
@@ -72,10 +83,12 @@ const Card = ({
       setTimeout(() => {
         if (typeof recycle === 'function') {
           recycle()
-          setDropState('')
-          setCanClick(true)
+          if (isMounted.current) {
+            setDropState('')
+            setCanClick(true)
+          }
         }
-      }, 200)
+      }, 500)
     }
   }
 
@@ -104,6 +117,7 @@ const Card = ({
         <span />
         <span />
       </div>
+      {amountBadge && <S.AmountBadge>{amountObtained}</S.AmountBadge>}
       {displayRarity && (
         <S.RarityBadge>
           <img alt={rarity} src={`/img/${rarity}.png`}></img>
