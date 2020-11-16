@@ -87,9 +87,6 @@ const rarityModifierBlur = {
 const cardModifiers = {
   normal: () => css`
     height: 18rem;
-    &:hover > div {
-      display: block;
-    }
     ${media.between('medium', 'large')`
       height: 15rem;
     `}
@@ -237,16 +234,30 @@ export const Wrapper = styled.div`
   ${({
     size,
     rarity = 'N',
-    playAnimation,
-    playBlurAnimation
+    playAnimation = false,
+    playBlurAnimation = false,
+    isDragging = false,
+    displayCardInfos
   }: { theme: DefaultTheme } & Pick<
     CardProps,
-    'size' | 'playAnimation' | 'playBlurAnimation'
-  > & { rarity: keyof typeof rarityModifier }) => css`
+    'size' | 'playAnimation' | 'playBlurAnimation' | 'displayCardInfos'
+  > & { rarity: keyof typeof rarityModifier } & { isDragging: boolean }) => css`
     position: relative;
     width: 100%;
-    ${size &&
-    cardModifiers[size!](rarity!, playAnimation!, playBlurAnimation!)};
+    ${displayCardInfos &&
+    css`
+      cursor: grabbing;
+    `}
+    ${size && cardModifiers[size!](rarity!, playAnimation!, playBlurAnimation!)}
+    &:hover > div {
+      ${isDragging || size === 'full'
+        ? css`
+            display: none;
+          `
+        : css`
+            display: block;
+          `}
+    }
   `}
 `
 
@@ -325,10 +336,15 @@ export const Image = styled.img`
     `}
   `}
 `
-export const CardInfoContainer = styled.div`
-  ${({ theme }) => css`
+
+type CardInfoCointainerProps = {
+  index?: number
+  thresholdIndex?: number
+}
+
+export const CardInfoContainer = styled.div<CardInfoCointainerProps>`
+  ${({ theme, index, thresholdIndex }) => css`
     position: absolute;
-    right: -29rem;
     top: 0;
     width: 28rem;
     z-index: ${theme.layers.overlay};
@@ -350,6 +366,25 @@ export const CardInfoContainer = styled.div`
       right: -42rem;
       transform: translateY(-50%);
       top: 50%;
+      ${
+        !!index &&
+        !!thresholdIndex &&
+        Array.from(new Array(100))
+          .map((_, index) => {
+            const indexes = [
+              (index + 1) * thresholdIndex - 1,
+              (index + 1) * thresholdIndex - 2
+            ]
+            return indexes
+          })
+          .find((i) => i.includes(index))
+          ? css`
+              left: -44rem;
+            `
+          : css`
+              right: -42rem;
+            `
+      }
     `}
 
     @media screen and (max-width: 350px) {

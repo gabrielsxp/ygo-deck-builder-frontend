@@ -249,7 +249,14 @@ function Boxes({
                 <CardGrid>
                   {recycledCards &&
                     recycledCards.map((card, index) => {
-                      return <Card {...card} key={index} />
+                      return (
+                        <Card
+                          thresholdIndex={10}
+                          index={index}
+                          {...card}
+                          key={index}
+                        />
+                      )
                     })}
                 </CardGrid>
               </div>
@@ -401,6 +408,8 @@ function Boxes({
                   grayscale={!obtainedCards[card?.name]}
                   key={index}
                   {...card}
+                  thresholdIndex={10}
+                  index={index}
                 />
               )
             })}
