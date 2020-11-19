@@ -135,13 +135,9 @@ function Boxes({
   }
 
   const recyclePack = () => {
-    console.log(packIndex)
-    console.log(currentPacks[packIndex])
-    console.log(currentPacks.length)
     const cp: CardProps[][] = Object.assign([], currentPacks)
     if (cp[packIndex].length > 0) {
       const r = cp[packIndex].splice(0, 1)
-      console.log('card: ', r)
       setRecycledCards(Object.assign([], sortCards([...recycledCards, ...r])))
       setCurrentPacks(Object.assign([], cp))
       if (cp[packIndex].length === 1) {
@@ -151,22 +147,15 @@ function Boxes({
       }
     }
     if (cp[packIndex].length === 0) {
-      console.log('cp length', cp.length)
       setCurrentPacks(Object.assign([], cp))
-      console.log('cp length', cp.length)
       if (cp.length === 1) {
         setDisplayOpenedCards(true)
-        console.log('display: ', displayOpenedCards)
       } else {
         const index = packIndex
-        console.log('index: ', index)
-        console.log('cp undefined', cp[packIndex])
         cp.splice(index, 1)
-        console.log('cp: ', cp)
         setCurrentPacks(Object.assign([], cp))
       }
     }
-    console.log(currentPacks[packIndex])
   }
 
   const sortCards = (cards: CardProps[]) => {
@@ -210,17 +199,12 @@ function Boxes({
     }, [])
     const checked: CardProps[] = []
     const rs: CardProps[] = Object.assign([], [...allPacks])
-    console.log('recycled: ', rs)
 
     const currentCardsByAmount = rs.reduce(
       (acc: { [x: string]: number }, card) => {
-        console.log('card:', card)
         const currentCard: string = card?.name
-        console.log('current card: ', currentCard)
         if (!checked.find((c) => c?.name === currentCard)) {
           const amount = rs.filter((c) => c?.name === currentCard)?.length
-          console.log('amount: ', amount)
-          console.log('card name: ', currentCard)
           acc[`${card?.name}`] += amount
           checked.push(card)
         }
@@ -228,7 +212,6 @@ function Boxes({
       },
       { ...obtainedCards }
     )
-    console.log('obtained: ', currentCardsByAmount)
     setObtainedCads(Object.assign(currentCardsByAmount))
     setDisplayOverlay(true)
     setCurrentPacks(Object.assign([], cp))
