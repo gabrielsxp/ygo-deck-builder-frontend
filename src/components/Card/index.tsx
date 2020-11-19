@@ -165,7 +165,11 @@ const Card = ({
           showImages={showImages}
           grayscale={grayscale}
           alt={name}
-          src={card_images[0]}
+          src={
+            card_images[0]
+              ? card_images[0].replace('http://', 'https://')
+              : 'https://res.cloudinary.com/yugiohdeckbuilder/image/upload/v1605722613/card-back_b4kypq.webp'
+          }
           size={size}
         />
       )}

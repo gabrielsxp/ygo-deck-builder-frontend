@@ -103,7 +103,10 @@ const BoxCardPack = ({
       <span></span>
       <S.ImageWrapper full={full} slashAnimation={slashAnimation}>
         <span></span>
-        <S.Image src={image} alt={name}></S.Image>
+        <S.Image
+          src={image ? image.replace('http://', 'https://') : image}
+          alt={name}
+        ></S.Image>
       </S.ImageWrapper>
       <S.Name>{name}</S.Name>
     </Wrapper>
@@ -114,7 +117,10 @@ const BoxCardPack = ({
         <span></span>
         <S.ImageWrapper>
           <span></span>
-          <S.Image src={image} alt={name}></S.Image>
+          <S.Image
+            src={image ? image.replace('http://', 'https://') : image}
+            alt={name}
+          ></S.Image>
         </S.ImageWrapper>
         <S.Name>{name}</S.Name>
       </Wrapper>
