@@ -348,7 +348,7 @@ function Boxes({
         <Header
           name={box?.name}
           image={
-            box?.cover?.replace('http://'. 'https://') ??
+            box?.cover?.replace('http://', 'https://') ??
             'https://res.cloudinary.com/yugiohdeckbuilder/image/upload/v1605463178/boxcover_n1h2yw.webp'
           }
         >
