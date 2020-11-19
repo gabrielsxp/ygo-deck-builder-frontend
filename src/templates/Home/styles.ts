@@ -18,8 +18,9 @@ export const SectionTitles = styled.div`
     flex-direction: column;
     width: 100%;
     align-items: center;
+    margin-top: ${theme.spacings.small};
     margin-bottom: ${theme.spacings.xsmall};
-    padding: ${theme.spacings.xlarge} 0;
+    padding: ${theme.spacings.xsmall} 0;
     > h2 {
       margin-bottom: ${theme.spacings.xxsmall};
       text-align: center;
@@ -96,12 +97,14 @@ export const SectionWrapperAnimated = styled.section`
     padding: calc(${theme.spacings.large} * 2) 0;
     margin: auto 0;
     overflow: hidden;
+    position: relative;
     > [id^='pattern'] {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
       width: 100%;
       height: auto;
+      margin-top: -4rem;
     }
     > #pattern-1 {
       animation: upDownHome 2s 0s ease-in-out infinite alternate;
@@ -125,6 +128,26 @@ export const SectionWrapperAnimated = styled.section`
     }
   `}
 `
+export const InfosContainer = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: ${theme.spacings.xsmall};
+    & > span {
+      color: ${theme.colors.white};
+      font-size: ${theme.font.sizes.small};
+      &:first-child {
+        margin-right: ${theme.spacings.xxsmall};
+      }
+      &:last-child {
+        margin-left: ${theme.spacings.xxsmall};
+      }
+    }
+  `}
+`
+
 export const ButtonContainer = styled.div`
   ${({ theme }) => css`
     padding: ${theme.spacings.small};

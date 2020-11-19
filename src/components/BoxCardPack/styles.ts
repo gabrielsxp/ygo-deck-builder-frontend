@@ -16,9 +16,21 @@ export const Image = styled.img`
 export const ImageWrapper = styled.div<
   Pick<BoxCardPackProps, 'full' | 'slashAnimation'>
 >`
-  position: relative;
-  width: 100%;
-  height: 100%;
+  ${({ full }) => css`
+    position: relative;
+    width: 100%;
+    height: 100%;
+    &:after {
+      content: '';
+      display: ${full ? 'block' : 'none'};
+      width: 500%;
+      height: 500%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: transparent;
+    }
+  `}
   ${({ full, slashAnimation, theme }) => css`
     ${full &&
     slashAnimation &&

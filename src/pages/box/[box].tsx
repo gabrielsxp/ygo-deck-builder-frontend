@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import Home from 'templates/Home'
 import axios from 'client'
 import Heading from 'components/Heading'
@@ -14,6 +15,8 @@ import Overlay from 'components/Overlay'
 import { BoxCardPackProps } from 'components/BoxCardPack'
 import { GetStaticPaths } from 'next'
 import { useState, useEffect } from 'react'
+import Head from 'next/head'
+import { NextSeo } from 'next-seo'
 
 type BoxInfoType = {
   total?: number
@@ -39,7 +42,9 @@ function Boxes({
   cards,
   infos,
   packs,
-  obtained
+  obtained,
+  url,
+  isSelectionBox
 }: {
   boxes: BoxCardPackProps[]
   box: BoxCardPackProps
@@ -47,6 +52,8 @@ function Boxes({
   infos: BoxInfoType
   packs: CardProps[][]
   obtained: ObtainedCardProps
+  url: string
+  isSelectionBox: boolean
 }) {
   const [packIndex] = useState<number>(0)
   const [boxReseted, setBoxReseted] = useState<boolean>(false)
@@ -164,10 +171,10 @@ function Boxes({
   const sortCards = (cards: CardProps[]) => {
     const cardsClone: CardProps[] = Object.assign([], cards)
     const ur: CardProps[] = cardsClone
-      .filter((c) => c.rarity.match(/ur/i))
+      .filter((c) => c.rarity?.match(/ur/i))
       .sort((a, b) => b?.name.localeCompare(a?.name))
     const sr: CardProps[] = cardsClone
-      .filter((c) => c.rarity.match(/sr/i))
+      .filter((c) => c.rarity?.match(/sr/i))
       .sort((a, b) => b?.name.localeCompare(a?.name))
     const rare: CardProps[] = cardsClone
       .filter((c) => c.rarity === 'R')
@@ -227,203 +234,259 @@ function Boxes({
   }
 
   return (
-    <Home>
-      {currentPacks && currentPacks?.length > 0 && (
-        <Overlay
-          show={displayOverlay}
-          scroll={displayOpenedCards}
-          hideOverlay={() => setDisplayOverlay(false)}
-          skip={skipPackOpening}
-          skipAndClose={skipPackOpeningAndClose}
-          displaySkipButton={!displayOpenedCards}
-        >
-          <Container>
-            {displayOpenedCards && (
-              <div style={{ padding: '5rem 0' }}>
-                <Heading size="normal" color="light">
-                  Cards obtained -{' '}
-                  <Button onClick={() => controlPackOpening(1)} color="primary">
-                    Open another pack
-                  </Button>
-                </Heading>
-                <CardGrid>
-                  {recycledCards &&
-                    recycledCards.map((card, index) => {
+    <>
+      <Head>
+        <title>Duel Links Packs - {box.name}</title>
+        <meta
+          name="description"
+          content="A tool that allows to open Duel Links for fun"
+        />
+      </Head>
+      <NextSeo>
+        title={box.name} description="Yu-Gi-Oh! Duel Links Packs allow you to
+        open Yu-Gi-Oh! Duel Links packs of all boxes released in the game.
+        Updated on released of every box !" canonical=
+        {`https://duellinkspacks.com${url}`} openGraph=
+        {{
+          url: `https://duellinkspacks.com${url}`,
+          title: `Duel Links Packs - ${box.name}`,
+          description:
+            'Yu-Gi-Oh! Duel Links Packs allow you to open Yu-Gi-Oh! Duel Links packs of all boxes released in the game. Updated on released of every box !',
+          images: [{ url: box.cover }],
+          site_name: `Duel Links Packs - ${box.name}`,
+          locale: 'pt_BR'
+        }}
+      </NextSeo>
+      <Home>
+        {currentPacks && currentPacks?.length > 0 && (
+          <Overlay
+            show={displayOverlay}
+            scroll={displayOpenedCards}
+            hideOverlay={() => setDisplayOverlay(false)}
+            skip={skipPackOpening}
+            skipAndClose={skipPackOpeningAndClose}
+            displaySkipButton={!displayOpenedCards}
+          >
+            <Container>
+              {displayOpenedCards && (
+                <div style={{ padding: '5rem 0' }}>
+                  <Heading size="normal" color="light">
+                    Cards obtained -{' '}
+                    <Button
+                      onClick={() => controlPackOpening(1)}
+                      color="primary"
+                    >
+                      Open another pack
+                    </Button>
+                    <Button
+                      onClick={() => controlPackOpening(10)}
+                      color="primary"
+                      style={{ marginLeft: '1.2rem' }}
+                    >
+                      Open 10 more packs
+                    </Button>
+                  </Heading>
+                  <CardGrid>
+                    {recycledCards &&
+                      recycledCards.map((card, index) => {
+                        return (
+                          <Card
+                            thresholdIndex={10}
+                            index={index}
+                            {...card}
+                            key={index}
+                          />
+                        )
+                      })}
+                  </CardGrid>
+                </div>
+              )}
+              {!displayOpenedCards && (
+                <S.PackOpeningWrapper>
+                  {displayPack && (
+                    <BoxCardPack
+                      name={box?.name}
+                      slug={box?.slug}
+                      image={box?.image}
+                      full
+                      slashAnimation={clickedPack}
+                      clickCallback={clickPack}
+                    />
+                  )}
+                  {currentPacks[packIndex] &&
+                    currentPacks[packIndex]?.length > 0 &&
+                    currentPacks[packIndex]?.map((card, index) => {
                       return (
                         <Card
-                          thresholdIndex={10}
-                          index={index}
-                          {...card}
+                          playAnimation={
+                            index === currentPacks[packIndex]?.length - 1 &&
+                            displayPack
+                          }
+                          showImages={!displayPack}
+                          playBlurAnimation={displayAnimation}
+                          size="full"
                           key={index}
+                          {...card}
+                          recycle={recyclePack}
+                          displayRarity={!displayPack}
                         />
                       )
                     })}
-                </CardGrid>
-              </div>
-            )}
-            {!displayOpenedCards && (
-              <S.PackOpeningWrapper>
-                {displayPack && (
-                  <BoxCardPack
-                    name={box?.name}
-                    slug={box?.slug}
-                    image={box?.image}
-                    full
-                    slashAnimation={clickedPack}
-                    clickCallback={clickPack}
-                  />
-                )}
-                {currentPacks[packIndex] &&
-                  currentPacks[packIndex]?.length > 0 &&
-                  currentPacks[packIndex]?.map((card, index) => {
-                    return (
-                      <Card
-                        playAnimation={
-                          index === currentPacks[packIndex]?.length - 1 &&
-                          displayPack
-                        }
-                        showImages={!displayPack}
-                        playBlurAnimation={displayAnimation}
-                        size="full"
-                        key={index}
-                        {...card}
-                        recycle={recyclePack}
-                        displayRarity={!displayPack}
-                      />
-                    )
-                  })}
-              </S.PackOpeningWrapper>
-            )}
-          </Container>
-        </Overlay>
-      )}
-      <Header
-        name={box?.name}
-        image={
-          box?.cover ??
-          'https://res.cloudinary.com/yugiohdeckbuilder/image/upload/v1605463178/boxcover_n1h2yw.webp'
-        }
-      >
-        <MediaMatch greaterThan="medium">
-          <S.ButtonContainer>
-            <p>{box?.name}</p>
-            <span>Packs opened: {total}</span>
-            {total < packs?.length ? (
-              <div>
-                <Button
-                  onClick={() => controlPackOpening(1)}
-                  color="primary"
-                  size="large"
-                >
-                  Open 1 pack
-                </Button>
-                <Button
-                  onClick={() => controlPackOpening(10)}
-                  color="primary"
-                  size="large"
-                >
-                  Open 10 packs
-                </Button>
-              </div>
-            ) : (
-              <Button color="primary" onClick={() => resetBox()}>
-                Reset box
-              </Button>
-            )}
-            <S.ButtonContainer style={{ marginTop: '1.2rem' }}>
-              <div>
+                </S.PackOpeningWrapper>
+              )}
+            </Container>
+          </Overlay>
+        )}
+        <Header
+          name={box?.name}
+          image={
+            box?.cover ??
+            'https://res.cloudinary.com/yugiohdeckbuilder/image/upload/v1605463178/boxcover_n1h2yw.webp'
+          }
+        >
+          <MediaMatch greaterThan="medium">
+            <S.ButtonContainer>
+              <p>{box?.name}</p>
+              <span>
+                Total gems: {isSelectionBox ? 200 * total : 50 * total}
+              </span>
+              <S.InfosContainer>
+                <span>Packs opened: {total}</span>
+                <span>Packs remaining: {packs.length - total}</span>
+              </S.InfosContainer>
+              {total < packs?.length ? (
+                <div>
+                  <Button
+                    onClick={() => controlPackOpening(1)}
+                    color="primary"
+                    size="large"
+                  >
+                    Open 1 pack
+                  </Button>
+                  <Button
+                    onClick={() => controlPackOpening(10)}
+                    color="primary"
+                    size="large"
+                  >
+                    Open 10 packs
+                  </Button>
+                </div>
+              ) : (
                 <Button color="primary" onClick={() => resetBox()}>
                   Reset box
                 </Button>
-                <Button color="primary" onClick={() => resetObtainedCards()}>
-                  Reset obtained cards
-                </Button>
-              </div>
+              )}
+              <S.ButtonContainer style={{ marginTop: '1.2rem' }}>
+                <div>
+                  <Button color="primary" onClick={() => resetBox()}>
+                    Reset box
+                  </Button>
+                  <Button color="primary" onClick={() => resetObtainedCards()}>
+                    Reset obtained cards
+                  </Button>
+                </div>
+              </S.ButtonContainer>
             </S.ButtonContainer>
-          </S.ButtonContainer>
-        </MediaMatch>
-      </Header>
-      <Container>
-        <MediaMatch lessThan="medium">
-          <S.ButtonContainer>
-            <p>{box?.name}</p>
-            <span>Packs opened: {total}</span>
-            {total < packs?.length ? (
-              <div>
-                <Button
-                  onClick={() => controlPackOpening(1)}
-                  color="primary"
-                  size="large"
-                >
-                  Open 1 pack
+          </MediaMatch>
+        </Header>
+        <Container>
+          <MediaMatch lessThan="medium">
+            <S.ButtonContainer>
+              <p>{box?.name}</p>
+              <span>
+                Total gems: {isSelectionBox ? 200 * total : 50 * total}
+              </span>
+              <S.InfosContainer>
+                <span>Packs opened: {total}</span>
+                <span>Packs remaining: {packs.length - total}</span>
+              </S.InfosContainer>
+              {total < packs?.length ? (
+                <div>
+                  <Button
+                    onClick={() => controlPackOpening(1)}
+                    color="primary"
+                    size="large"
+                  >
+                    Open 1 pack
+                  </Button>
+                  <Button
+                    onClick={() => controlPackOpening(10)}
+                    color="primary"
+                    size="large"
+                  >
+                    Open 10 packs
+                  </Button>
+                </div>
+              ) : (
+                <Button color="primary" onClick={() => resetBox()}>
+                  Reset box
                 </Button>
-                <Button
-                  onClick={() => controlPackOpening(10)}
-                  color="primary"
-                  size="large"
-                >
-                  Open 10 packs
-                </Button>
-              </div>
-            ) : (
-              <Button color="primary" onClick={() => resetBox()}>
-                Reset box
-              </Button>
-            )}
-          </S.ButtonContainer>
-        </MediaMatch>
-        <S.SectionTitles>
-          <Heading size="large" color="primary">
-            Cards in this box
-          </Heading>
-          <Heading size="small" color="light">
-            All cards presents in the box: {cards?.length}
-          </Heading>
-          <S.BoxInfosContainer>
-            <S.Label>
-              <S.LabelDescription>UR: </S.LabelDescription>
-              {infos?.UR}
-            </S.Label>
-            <S.Label>
-              <S.LabelDescription>SR: </S.LabelDescription>
-              {infos?.SR}
-            </S.Label>
-            <S.Label>
-              <S.LabelDescription>R: </S.LabelDescription>
-              {infos?.R}
-            </S.Label>
-            <S.Label>
-              <S.LabelDescription>N: </S.LabelDescription>
-              {infos?.N}
-            </S.Label>
-          </S.BoxInfosContainer>
-        </S.SectionTitles>
-        <CardGrid>
-          {cards &&
-            cards.map((card, index) => {
-              return (
-                <Card
-                  amountBadge={card?.rarity === 'SR' || card?.rarity === 'UR'}
-                  amountObtained={obtainedCards[card?.name]}
-                  grayscale={!obtainedCards[card?.name]}
-                  key={index}
-                  {...card}
-                  thresholdIndex={10}
-                  index={index}
-                />
-              )
-            })}
-        </CardGrid>
-      </Container>
-      <Container>
-        <BoxCardPackCarousel
-          title="Latest boxes"
-          subtitle="Try to open the most recent boxes released"
-          items={boxes}
-          color="dark"
-        />
-      </Container>
-    </Home>
+              )}
+              <S.ButtonContainer style={{ marginTop: '1.2rem' }}>
+                <div>
+                  <Button color="primary" onClick={() => resetBox()}>
+                    Reset box
+                  </Button>
+                  <Button color="primary" onClick={() => resetObtainedCards()}>
+                    Reset obtained cards
+                  </Button>
+                </div>
+              </S.ButtonContainer>
+            </S.ButtonContainer>
+          </MediaMatch>
+          <S.SectionTitles>
+            <Heading size="large" color="primary">
+              Cards in this box
+            </Heading>
+            <Heading size="small" color="light">
+              All cards presents in the box: {cards?.length}
+            </Heading>
+            <S.BoxInfosContainer>
+              <S.Label>
+                <S.LabelDescription>UR: </S.LabelDescription>
+                {infos?.UR}
+              </S.Label>
+              <S.Label>
+                <S.LabelDescription>SR: </S.LabelDescription>
+                {infos?.SR}
+              </S.Label>
+              <S.Label>
+                <S.LabelDescription>R: </S.LabelDescription>
+                {infos?.R}
+              </S.Label>
+              <S.Label>
+                <S.LabelDescription>N: </S.LabelDescription>
+                {infos?.N}
+              </S.Label>
+            </S.BoxInfosContainer>
+          </S.SectionTitles>
+          <CardGrid>
+            {cards &&
+              cards.map((card, index) => {
+                return (
+                  <Card
+                    amountBadge={card?.rarity === 'SR' || card?.rarity === 'UR'}
+                    amountObtained={obtainedCards[card?.name]}
+                    grayscale={!obtainedCards[card?.name]}
+                    key={index}
+                    {...card}
+                    thresholdIndex={10}
+                    index={index}
+                  />
+                )
+              })}
+          </CardGrid>
+        </Container>
+        <Container>
+          <BoxCardPackCarousel
+            title="Latest boxes"
+            subtitle="Try to open the most recent boxes released"
+            items={boxes}
+            color="dark"
+          />
+        </Container>
+      </Home>
+    </>
   )
 }
 
@@ -573,9 +636,20 @@ export async function getStaticProps({ params }: { params: { box: string } }) {
       lastCardName = Object.keys(firstCard)[0]
     }
     // subtract the amount of cards getted
-
-    poolsClone[firstCardType][firstCardIndex][firstCardName]--
-    poolsClone[lastCardType][lastCardIndex][lastCardName]--
+    let firstCardsAmount =
+      poolsClone[firstCardType][firstCardIndex][firstCardName]
+    if (firstCardsAmount) {
+      firstCardsAmount--
+      poolsClone[firstCardType][firstCardIndex][
+        firstCardName
+      ] = firstCardsAmount
+    }
+    let lastCardsAmount =
+      poolsClone[lastCardType!][lastCardIndex!][lastCardName!]
+    if (lastCardsAmount) {
+      lastCardsAmount--
+      poolsClone[lastCardType][lastCardIndex][lastCardName] = lastCardsAmount
+    }
 
     if (poolsClone[firstCardType][firstCardIndex][firstCardName] === 0) {
       poolsClone[firstCardType].splice(firstCardIndex, 1)
@@ -623,7 +697,11 @@ export async function getStaticProps({ params }: { params: { box: string } }) {
     }
 
     // subtract the amount of cards getted
-    poolsClone[type][cardIndex][cardName]--
+    let cardsAmount = poolsClone[type][cardIndex][cardName]
+    if (cardsAmount) {
+      cardsAmount--
+      poolsClone[type][cardIndex][cardName] = cardsAmount
+    }
 
     if (poolsClone[type][cardIndex][cardName] === 0) {
       poolsClone[type].splice(cardIndex, 1)
@@ -722,14 +800,23 @@ export async function getStaticProps({ params }: { params: { box: string } }) {
   const packsInOrder = await generateAllPacks()
   const packs = shuffleArray(packsInOrder)
 
+  let selectionBoxesLength = 0
+  if (Array.isArray(boxes)) {
+    selectionBoxesLength = boxes.filter((b) => b?.name?.match(/selection/i))
+      .length
+  }
   return {
     props: {
       box,
-      boxes: Array.isArray(boxes) ? boxes.reverse().slice(0, 10) : [],
+      boxes: Array.isArray(boxes)
+        ? boxes.reverse().slice(selectionBoxesLength, 15)
+        : [],
       cards,
       infos,
       packs,
-      obtained
+      obtained,
+      url: `/box/${params.box}`,
+      isSelectionBox: new RegExp(/selection/i).test(box?.name ?? '')
     }
   }
 }

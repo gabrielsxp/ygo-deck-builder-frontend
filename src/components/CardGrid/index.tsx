@@ -13,6 +13,7 @@ export type CardGridProps = {
 type DraggabledItemProps = {
   index: number
   dragOrigin: string
+  cardDictionary?: { [x: string]: { amount: number; allowed: number } }
 }
 
 const CardGrid = ({

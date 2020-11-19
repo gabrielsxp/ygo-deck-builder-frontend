@@ -101,6 +101,12 @@ export const MenuGroup = styled.div`
         margin-left: ${theme.spacings.xxsmall};
       }
     `}
+    ${MenuLink} {
+      ${media.lessThan('medium')`
+        color: ${theme.colors.white};
+        text-decoration
+      `}
+    }
   `}
 `
 export const RegistrationBox = styled.div`
@@ -144,7 +150,7 @@ export const MenuFull = styled.nav<MenuProps>`
     flex-direction: column;
     justify-content: space-between;
     background-color: ${theme.colors.white};
-    position: absolute;
+    position: fixed;
     overflow: hidden;
     left: 0;
     top: 0;
@@ -154,7 +160,7 @@ export const MenuFull = styled.nav<MenuProps>`
     width: 100vw;
     pointer-events: ${isOpen ? 'full' : 'none'};
     transition: opacity 0.2s ease-in-out;
-
+    z-index: 300;
     > svg {
       position: absolute;
       right: 1.6rem;

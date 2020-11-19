@@ -8,8 +8,8 @@ import { ItemTypes } from 'templates/DeckBuilder'
 export type CardProps = {
   name: string
   displayRarity?: boolean
-  rarity?: 'N' | 'R' | 'SR' | 'UR'
-  amount?: [number]
+  rarity: 'N' | 'R' | 'SR' | 'UR'
+  amount?: number[]
   how?: string[] | undefined
   release?: string
   duelLinksRarity: 'N' | 'R' | 'SR' | 'UR'
@@ -82,7 +82,7 @@ const Card = ({
   const [dropState, setDropState] = useState<string>('')
 
   const [{ isDragging }, drag] = useDrag({
-    item: { type: ItemTypes.CARD, index, dragOrigin },
+    item: { type: ItemTypes.CARD, index, dragOrigin, name },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging()
     })
@@ -137,7 +137,7 @@ const Card = ({
           ? 'drop-right'
           : ''
       }
-      ref={drag}
+      ref={dragOrigin !== '' ? drag : null}
       displayCardInfos={displayCardInfos}
       isDragging={isDragging}
       playAnimation={playAnimation}
@@ -174,7 +174,7 @@ const Card = ({
           showImages={showImages}
           grayscale={grayscale}
           alt={name}
-          src="/img/card-back.webp"
+          src="https://res.cloudinary.com/yugiohdeckbuilder/image/upload/v1605722613/card-back_b4kypq.webp"
         />
       )}
       {displayCardInfos && (

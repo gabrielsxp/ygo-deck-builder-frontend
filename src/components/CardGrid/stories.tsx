@@ -13,7 +13,7 @@ export const Default: Story = () => (
   <Container>
     <CardGrid>
       {Array.from(new Array(40)).map((_, index) => (
-        <Card key={index} {...data} rarity="UR" />
+        <Card key={index} {...data} rarity="UR" duelLinksRarity="UR" />
       ))}
     </CardGrid>
   </Container>

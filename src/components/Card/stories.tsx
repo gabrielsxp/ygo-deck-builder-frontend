@@ -195,22 +195,26 @@ export const DropAnimationLeft: Story<CardProps> = (args) => (
 
 Monster.args = {
   ...data,
-  rarity: 'UR'
+  rarity: 'UR',
+  duelLinksRarity: 'UR'
 }
 
 Trap.args = {
   ...trap,
-  rarity: 'UR'
+  rarity: 'UR',
+  duelLinksRarity: 'UR'
 }
 
 Spell.args = {
   ...spell,
-  rarity: 'SR'
+  rarity: 'SR',
+  duelLinksRarity: 'SR'
 }
 
 FullUR.args = {
   ...data,
   rarity: 'UR',
+  duelLinksRarity: 'UR',
   size: 'full',
   playAnimation: true,
   showImages: true,
@@ -221,6 +225,7 @@ FullSR.args = {
   ...data,
   size: 'full',
   rarity: 'SR',
+  duelLinksRarity: 'SR',
   playAnimation: true,
   showImages: true,
   displayRarity: true
@@ -230,6 +235,7 @@ FullR.args = {
   ...data,
   size: 'full',
   rarity: 'R',
+  duelLinksRarity: 'R',
   playAnimation: true,
   showImages: true,
   displayRarity: true
@@ -239,6 +245,7 @@ FullN.args = {
   ...data,
   size: 'full',
   rarity: 'N',
+  duelLinksRarity: 'N',
   playAnimation: false
 }
 
@@ -246,6 +253,7 @@ FullBlurUR.args = {
   ...data,
   size: 'full',
   rarity: 'UR',
+  duelLinksRarity: 'UR',
   playAnimation: false,
   playBlurAnimation: true
 }
@@ -253,6 +261,7 @@ FullBlurSR.args = {
   ...data,
   size: 'full',
   rarity: 'SR',
+  duelLinksRarity: 'SR',
   playAnimation: false,
   playBlurAnimation: true
 }
@@ -260,6 +269,7 @@ FullBlurR.args = {
   ...data,
   size: 'full',
   rarity: 'R',
+  duelLinksRarity: 'R',
   playAnimation: false,
   playBlurAnimation: true
 }
@@ -267,6 +277,7 @@ FullBlurN.args = {
   ...data,
   size: 'full',
   rarity: 'N',
+  duelLinksRarity: 'N',
   playAnimation: false,
   playBlurAnimation: true
 }
@@ -274,6 +285,7 @@ DropAnimationRight.args = {
   ...data,
   size: 'full',
   rarity: 'N',
+  duelLinksRarity: 'N',
   playAnimation: false,
   playBlurAnimation: false,
   dropAnimationRight: true
@@ -282,6 +294,7 @@ DropAnimationLeft.args = {
   ...data,
   size: 'full',
   rarity: 'N',
+  duelLinksRarity: 'N',
   playAnimation: false,
   playBlurAnimation: false,
   dropAnimationLeft: true
