@@ -239,7 +239,15 @@ function Boxes({
         <title>Duel Links Packs - {box.name}</title>
         <meta
           name="description"
-          content="A tool that allows to open Duel Links for fun"
+          content={`A tool that allows to open ${box.name} of Duel Links for fun`}
+        />
+        <link
+          rel="shortcut icon"
+          href={box.image ? box.image.replace('http://', 'https://') : box.name}
+        />
+        <link
+          rel="apple-touch-icon"
+          href={box.image ? box.image.replace('http://', 'https://') : box.name}
         />
       </Head>
       <NextSeo>
