@@ -9,7 +9,10 @@ export type HeaderProps = {
 
 const Header = ({ image, name, children }: HeaderProps) => (
   <S.Wrapper>
-    <S.Image alt={name} src={image} />
+    <S.Image
+      alt={name}
+      src={image ? image.replace('http://', 'https://') : image}
+    />
     <Container id="header-children">{!!children && children}</Container>
   </S.Wrapper>
 )
