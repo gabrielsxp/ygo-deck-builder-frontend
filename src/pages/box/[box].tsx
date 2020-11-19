@@ -130,6 +130,7 @@ function Boxes({
   }
 
   const resetObtainedCards = () => {
+    resetBox()
     setObtainedCads(Object.assign({}, { ...obtained }))
   }
 
@@ -390,7 +391,7 @@ function Boxes({
                     Reset box
                   </Button>
                   <Button color="primary" onClick={() => resetObtainedCards()}>
-                    Reset obtained cards
+                    Reset all
                   </Button>
                 </div>
               </S.ButtonContainer>
@@ -436,7 +437,7 @@ function Boxes({
                     Reset box
                   </Button>
                   <Button color="primary" onClick={() => resetObtainedCards()}>
-                    Reset obtained cards
+                    Reset all
                   </Button>
                 </div>
               </S.ButtonContainer>
